@@ -9,16 +9,1555 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="styles.css">
+<style>
+:root{
+  --bg:#F4F7F5;--surface:#FFFFFF;--surface-2:#EEF3F0;--ink:#1B2420;--muted:#5D6C66;--line:#D9E2DD;
+  --green:#2E9E4F;--green-dark:#22783B;--green-soft:#E3F4E8;
+  --red:#D9434A;--red-dark:#A8333A;--red-soft:#FBE7E8;
+  --amber:#E89A12;--amber-dark:#B5770B;--amber-soft:#FDF2DC;
+  --blue:#2D7BE0;--blue-soft:#E4EEFC;--ph:#FFF3C4;--ph-ink:#5A4300;
+  --radius:16px;color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111614;--surface:#19201D;--surface-2:#202925;--ink:#E7EEEA;--muted:#9BABA4;--line:#2D3833;
+  --green:#3BBE62;--green-dark:#2A8F48;--green-soft:#173524;
+  --red:#F06A70;--red-dark:#B5474C;--red-soft:#3A1C1E;
+  --amber:#F4B23A;--amber-dark:#B98420;--amber-soft:#382A10;
+  --blue:#5B9BF0;--blue-soft:#172A44;--ph:#4A3C10;--ph-ink:#FFE7A3;color-scheme:dark;}}
+:root[data-theme="dark"]{
+  --bg:#111614;--surface:#19201D;--surface-2:#202925;--ink:#E7EEEA;--muted:#9BABA4;--line:#2D3833;
+  --green:#3BBE62;--green-dark:#2A8F48;--green-soft:#173524;
+  --red:#F06A70;--red-dark:#B5474C;--red-soft:#3A1C1E;
+  --amber:#F4B23A;--amber-dark:#B98420;--amber-soft:#382A10;
+  --blue:#5B9BF0;--blue-soft:#172A44;--ph:#4A3C10;--ph-ink:#FFE7A3;color-scheme:dark;}
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"Nunito",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;font-size:17px;line-height:1.5;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:10}
+button{font:inherit;color:inherit;cursor:pointer}
+code{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.88em;background:var(--surface-2);padding:1px 5px;border-radius:6px}
+pre{background:var(--surface-2);border-radius:12px;padding:12px 14px;overflow-x:auto;font-size:13.5px;line-height:1.45;margin:10px 0 0}
+pre code{background:none;padding:0;font-size:inherit}
+mark.ph{background:var(--ph);color:var(--ph-ink);border-radius:5px;padding:0 4px}
+.wrap{max-width:640px;margin:0 auto;padding:16px 16px 140px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);display:flex;gap:14px;align-items:center;padding:10px 0 12px;font-weight:800}
+.top .stat{display:flex;align-items:center;gap:5px;font-size:16px}
+.top .goal{flex:1;height:12px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.top .goal i{display:block;height:100%;background:var(--amber);border-radius:99px;transition:width .3s}
+h1{font-size:28px;line-height:1.2;margin:8px 0 4px;font-weight:900;letter-spacing:-.01em}
+h2{font-size:20px;margin:0 0 6px;font-weight:800}
+.sub{color:var(--muted);margin:0 0 18px}
+.card{background:var(--surface);border:2px solid var(--line);border-radius:var(--radius);padding:16px}
+.actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:0 0 22px}
+.tile{display:flex;flex-direction:column;gap:2px;align-items:flex-start;text-align:left;background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:var(--radius);padding:12px 14px}
+.tile b{font-size:16px}.tile span{color:var(--muted);font-size:14px}
+.tile:active{transform:translateY(2px);border-bottom-width:2px}
+.tip{background:var(--blue-soft);border:2px solid transparent;border-radius:var(--radius);padding:12px 14px;margin:0 0 18px;font-size:15px}
+.tip button{background:none;border:0;color:var(--blue);font-weight:800;padding:0;margin-right:14px}
+.path{display:flex;flex-direction:column;gap:12px}
+.unit{display:grid;grid-template-columns:56px 1fr;gap:12px;align-items:center;background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:var(--radius);padding:12px 14px;text-align:left;width:100%}
+.unit.rec{border-color:var(--green)}
+.unit .ic{width:56px;height:56px;border-radius:50%;display:grid;place-items:center;font-size:26px;background:var(--green-soft)}
+.unit .t{font-weight:800}.unit .p{color:var(--muted);font-size:14px}
+.bar{height:8px;border-radius:99px;background:var(--surface-2);overflow:hidden;margin-top:6px}
+.bar i{display:block;height:100%;background:var(--green);border-radius:99px}
+.tag{display:inline-block;font-size:12px;font-weight:800;padding:1px 8px;border-radius:99px;background:var(--surface-2);color:var(--muted);margin-left:6px;vertical-align:2px}
+.btn{display:block;width:100%;border:0;border-radius:14px;padding:14px 16px;font-weight:900;font-size:16px;letter-spacing:.02em;background:var(--green);color:#fff;box-shadow:0 4px 0 var(--green-dark)}
+.btn:active{transform:translateY(3px);box-shadow:0 1px 0 var(--green-dark)}
+.btn:disabled{background:var(--surface-2);color:var(--muted);box-shadow:0 4px 0 var(--line);cursor:default}
+.btn.ghost{background:var(--surface);color:var(--ink);border:2px solid var(--line);box-shadow:0 4px 0 var(--line)}
+.btn.red{background:var(--red);box-shadow:0 4px 0 var(--red-dark)}
+.btn.amber{background:var(--amber);box-shadow:0 4px 0 var(--amber-dark)}
+.row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.row2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.lessonbar{display:flex;align-items:center;gap:12px;padding:10px 0 16px;position:sticky;top:env(safe-area-inset-top,0px);background:var(--bg);z-index:5}
+.x{background:none;border:0;font-size:26px;line-height:1;color:var(--muted);padding:4px 8px}
+.prog{flex:1;height:14px;border-radius:99px;background:var(--surface-2);overflow:hidden}
+.prog i{display:block;height:100%;background:var(--green);border-radius:99px;transition:width .3s}
+.kind{font-weight:800;color:var(--muted);font-size:14px;text-transform:uppercase;letter-spacing:.06em;margin:0 0 6px}
+.qtext{font-size:21px;font-weight:800;line-height:1.35;margin:0 0 16px}
+.hint{color:var(--muted);font-size:15px;margin:-6px 0 16px}
+.answer{background:var(--surface);border:2px solid var(--line);border-radius:var(--radius);padding:14px 16px;margin:0 0 14px}
+.keys{list-style:none;padding:0;margin:10px 0 0;display:flex;flex-direction:column;gap:6px}
+.keys li{display:flex;gap:8px;align-items:flex-start;font-size:15px}
+.keys li::before{content:"●";color:var(--green);font-size:10px;margin-top:6px}
+details{margin-top:10px}summary{cursor:pointer;color:var(--blue);font-weight:800;font-size:15px}
+.trap{background:var(--amber-soft);border-radius:12px;padding:10px 12px;font-size:15px;margin-top:10px}
+.opts{display:flex;flex-direction:column;gap:10px}
+.opt{text-align:left;background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:14px;padding:13px 14px;font-size:16px;font-weight:600}
+.opt.sel{border-color:var(--blue);background:var(--blue-soft)}
+.opt.ok{border-color:var(--green);background:var(--green-soft)}
+.opt.bad{border-color:var(--red);background:var(--red-soft)}
+.opt:disabled{cursor:default}
+.cloze{font-size:18px;line-height:1.6}
+.blank{display:inline-block;min-width:90px;border-bottom:3px solid var(--blue);color:var(--blue);font-weight:800;text-align:center}
+.pairs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pairs .col{display:flex;flex-direction:column;gap:10px}
+.pairs .opt{font-size:14.5px;padding:11px 12px;min-height:56px}
+.pairs .opt.done{opacity:.35;border-color:var(--green)}
+.pairs .opt.shake{animation:shake .3s}
+@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}
+.order-target{min-height:60px;border:2px dashed var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:8px;margin:0 0 14px}
+.order-target:empty::before{content:"Нажимай шаги по порядку";color:var(--muted);font-size:15px;padding:8px}
+.chip{text-align:left;background:var(--surface);border:2px solid var(--line);border-bottom-width:4px;border-radius:12px;padding:10px 12px;font-size:15px;font-weight:600}
+.chip .n{display:inline-block;min-width:22px;font-weight:900;color:var(--blue)}
+.sheet{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:2px solid var(--line);padding:14px 16px calc(14px + env(safe-area-inset-bottom,0px));z-index:20}
+.sheet .in{max-width:640px;margin:0 auto}
+.sheet.good{background:var(--green-soft);border-color:transparent}
+.sheet.bad{background:var(--red-soft);border-color:transparent}
+.sheet .msg{font-weight:900;font-size:19px;margin:0 0 4px}
+.sheet.good .msg{color:var(--green-dark)}.sheet.bad .msg{color:var(--red)}
+.sheet .exp{font-size:15px;margin:0 0 12px;max-height:30vh;overflow:auto}
+.done-hero{text-align:center;padding:30px 0}
+.done-hero .big{font-size:64px}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:20px 0}
+.stats div{background:var(--surface);border:2px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.stats b{display:block;font-size:22px}
+.stats span{color:var(--muted);font-size:13px}
+.timer{font-variant-numeric:tabular-nums;font-weight:900;font-size:28px;text-align:center;margin:6px 0 12px}
+.timer.over{color:var(--red)}
+.check{display:flex;gap:10px;align-items:flex-start;padding:8px 0;font-size:15px}
+.check input{width:22px;height:22px;margin-top:1px;accent-color:var(--green)}
+.search{width:100%;font:inherit;padding:12px 14px;border-radius:14px;border:2px solid var(--line);background:var(--surface);color:var(--ink);margin:0 0 12px}
+.field{display:flex;flex-direction:column;gap:4px;margin:0 0 12px}
+.field label{font-size:14px;font-weight:700;color:var(--muted)}
+.field input{font:inherit;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--surface);color:var(--ink)}
+.group{margin:22px 0 8px;font-weight:900}
+.cs-item{border-top:2px solid var(--line);padding:12px 0}
+.cs-item:first-child{border-top:0}
+.cs-q{font-weight:800;margin:0 0 4px}
+.lvl{font-size:12px;font-weight:800;color:var(--muted);margin-left:6px}
+.back{background:none;border:0;color:var(--blue);font-weight:800;padding:8px 0;margin:0 0 6px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+@media (max-width:420px){.qtext{font-size:19px}.pairs .opt{font-size:13.5px}}
+#ians,#ans{scroll-margin-top:72px}
+
+</style>
 </head>
 <body>
 <main id="app" aria-live="polite"></main>
-<script src="data/profile.js"></script>
-<script src="data/units.js"></script>
-<script src="data/q1.js"></script>
-<script src="data/q2.js"></script>
-<script src="data/q3.js"></script>
-<script src="data/q4.js"></script>
-<script src="app.js"></script>
+<script>
+// Значения по умолчанию для подстановок ⟨ключ⟩ в ответах. Их можно поменять в приложении на экране «Профиль».
+window.PROFILE_FIELDS = [
+  { group: "E-com проект", key: "company", label: "Компания (как называешь вслух)", def: "сервис быстрой доставки продуктов" },
+  { group: "E-com проект", key: "domain", label: "Домен команды", def: "Заказы и остатки" },
+  { group: "E-com проект", key: "period_ecom", label: "Срок работы", def: "2 года" },
+  { group: "E-com проект", key: "team", label: "Размер команды", def: "6" },
+  { group: "E-com проект", key: "de", label: "Дата-инженеров в команде", def: "4" },
+  { group: "E-com проект", key: "events", label: "Событий заказов в сутки", def: "3–5 млн" },
+  { group: "E-com проект", key: "p_orders", label: "Партиций в orders.v1", def: "12" },
+  { group: "E-com проект", key: "p_stock", label: "Партиций в stock.v1", def: "24" },
+  { group: "E-com проект", key: "p_app", label: "Партиций в app.events", def: "96" },
+  { group: "E-com проект", key: "ret", label: "Хранение orders.v1", def: "7 дней" },
+  { group: "E-com проект", key: "wm", label: "Watermark дедупа", def: "2 часа" },
+  { group: "E-com проект", key: "maxoff", label: "maxOffsetsPerTrigger", def: "200 тыс." },
+  { group: "E-com проект", key: "exec", label: "Ресурсы стрима", def: "3 executors по 2 ядра и 4 ГБ" },
+  { group: "E-com проект", key: "dags", label: "Число DAG домена", def: "20+" },
+  { group: "E-com проект", key: "ttl", label: "TTL горячих таблиц ClickHouse", def: "90 дней" },
+  { group: "E-com проект", key: "skew_fix", label: "Ускорение после устранения перекоса", def: "с 40 до 7 минут" },
+  { group: "E-com проект", key: "quar", label: "Событий в карантине в инциденте", def: "около 8 тыс." },
+  { group: "E-com проект", key: "oncall", label: "График дежурств", def: "неделя раз в 4–5 недель" },
+  { group: "E-com проект", key: "gmv_thr", label: "Порог сверки GMV", def: "0,5%" },
+  { group: "E-com проект", key: "vol_thr", label: "Порог DQ по объёму", def: "70%" },
+  { group: "E-com проект", key: "fresh_thr", label: "Порог алерта свежести", def: "10 минут" },
+  { group: "Банковский DWH", key: "bank", label: "Банк (как называешь вслух)", def: "крупный банк" },
+  { group: "Банковский DWH", key: "period_bank", label: "Срок работы", def: "2 года" },
+  { group: "Банковский DWH", key: "bteam", label: "Размер команды", def: "8" },
+  { group: "Банковский DWH", key: "bdev", label: "Разработчиков в команде", def: "5" },
+  { group: "Банковский DWH", key: "card_day", label: "Карточных операций в сутки", def: "5 млн" },
+  { group: "Банковский DWH", key: "hist", label: "История операций в Hadoop", def: "5 лет" },
+  { group: "Банковский DWH", key: "segs", label: "Сегментов Greenplum", def: "48" },
+  { group: "Банковский DWH", key: "gp_fix", label: "Ускорение витрины оборотов", def: "с 40 до 3 минут" },
+  { group: "Банковский DWH", key: "post_win", label: "Окно перегрузки проводок", def: "10 дней" },
+  { group: "Банковский DWH", key: "osv", label: "Расхождение с ОСВ в примере", def: "12 тыс. рублей" }
+];
+
+</script>
+<script>
+// Разделы курса. pairs — материал для упражнения «Пары».
+window.UNITS = [
+  { id: 1, icon: "👥", title: "Проект и команда", project: "E-com", pairs: [
+    ["Кластеры Kafka, ClickHouse, Trino", "Платформенная команда"], ["Схема событий заказа", "Бэкенд сервиса заказов"],
+    ["Стрим и факт заказов", "Ты"], ["ML-признаки домена", "Коллега по команде"],
+    ["Поток событий приложения", "Соседняя команда"], ["Prometheus и Grafana", "SRE"] ] },
+  { id: 2, icon: "📨", title: "Kafka и источники", project: "E-com", pairs: [
+    ["outbox", "событие в той же транзакции, что и заказ"], ["relay", "переносит строки outbox в Kafka"],
+    ["ключ order_id", "события заказа в одной партиции по порядку"], ["Schema Registry", "хранит схемы и проверяет совместимость"],
+    ["compacted-топик", "хранит последнее значение по ключу"], ["event_ts", "когда событие произошло"],
+    ["produced_ts", "когда событие ушло в Kafka"] ] },
+  { id: 3, icon: "🌊", title: "Spark Streaming", project: "E-com", pairs: [
+    ["checkpoint", "offsets и состояние стрима в S3"], ["watermark", "сколько помним event_id для дедупа"],
+    ["maxOffsetsPerTrigger", "защита от огромного батча после простоя"], ["foreachBatch", "запись батча в ClickHouse"],
+    ["restartPolicy Always", "оператор поднимает упавший стрим"], ["карантин", "битые сообщения с исходным JSON"] ] },
+  { id: 4, icon: "🗄️", title: "Iceberg, ClickHouse, Trino", project: "E-com", pairs: [
+    ["raw.orders_events", "все события, append"], ["dwh.fct_orders", "заказ = строка, MERGE"],
+    ["order_events", "события в ClickHouse, ReplacingMergeTree"], ["store_hourly_agg", "счётчики, AggregatingMergeTree"],
+    ["orders_daily_by_store", "итоги дня, ReplacingMergeTree(updated_at)"], ["каталог Iceberg", "указатель на текущий metadata.json"],
+    ["Trino", "SQL к таблицам Iceberg"] ] },
+  { id: 5, icon: "🗓️", title: "Airflow и батч", project: "E-com", pairs: [
+    ["orders_hourly_marts", "каждый час в :10"], ["stock_eod_snapshot", "00:30"], ["orders_daily", "02:00"],
+    ["stock_oos_marts", "03:00"], ["domain_maintenance", "04:30"], ["orders_reconcile", "06:00"],
+    ["features_orders_daily", "по Dataset после DQ"] ] },
+  { id: 6, icon: "✅", title: "Корректность данных", project: "E-com", pairs: [
+    ["MERGE по order_id", "факт не задваивается"], ["overwritePartitions", "перезапись только своего дня"],
+    ["dropDuplicatesWithinWatermark", "дедуп в стриме"], ["argMax(status, event_ts)", "текущий статус в ClickHouse"],
+    ["окно 2 дня в батче", "учёт поздних событий"], ["сверка GMV", "алерт при расхождении с источником"] ] },
+  { id: 7, icon: "⚡", title: "Оптимизация", project: "E-com", pairs: [
+    ["перекос данных", "одна задача идёт намного дольше остальных"], ["broadcast join", "маленькая таблица копируется на executors"],
+    ["AQE", "сам подбирает партиции шаффла"], ["компакция", "склеивает мелкие файлы"],
+    ["projection", "другой порядок сортировки внутри таблицы"], ["Too many parts", "слишком частые мелкие вставки"] ] },
+  { id: 8, icon: "🚨", title: "Мониторинг и инциденты", project: "E-com", pairs: [
+    ["freshness", "насколько витрина отстаёт от текущего времени"], ["maxOffsetsBehindLatest", "отставание стрима от конца топика"],
+    ["рост карантина", "источник, похоже, сменил схему"], ["on-call платформы", "инфраструктурные сбои"],
+    ["постмортем", "хронология, причина, действия"], ["backfill", "пересчёт периода после восстановления"] ] },
+  { id: 9, icon: "🧪", title: "CI/CD и тесты", project: "Оба", pairs: [
+    ["ruff", "линтер и форматтер Python"], ["sqlfluff", "линтер SQL"], ["pre-commit", "проверки перед каждым коммитом"],
+    ["CI", "проверки на сервере на каждый MR"], ["CD", "сборка образа и выкатка после мержа"], ["pytest", "запускает юнит-тесты"] ] },
+  { id: 10, icon: "🏦", title: "Банковский DWH", project: "Банк", pairs: [
+    ["STG", "копия источника один к одному"], ["DDS", "единая модель с историей"], ["MART", "витрины под потребителя"],
+    ["SCD2", "новая версия строки при изменении атрибута"], ["S2T", "спецификация маппинга от аналитика"],
+    ["client_sk", "суррогатный ключ клиента"], ["опердень", "после его закрытия грузим проводки"] ] },
+  { id: 11, icon: "🐘", title: "Greenplum и Hadoop", project: "Банк", pairs: [
+    ["DISTRIBUTED BY", "по какому ключу строки лежат на сегментах"], ["Redistribute Motion", "пересылка строк между сегментами"],
+    ["Broadcast Motion", "копия таблицы на все сегменты"], ["PXF", "внешние таблицы к Oracle, MS SQL, Hive"],
+    ["ANALYZE", "обновляет статистику оптимизатора"], ["ОСВ", "оборотно-сальдовая ведомость для сверки"] ] },
+  { id: 12, icon: "💬", title: "Общие вопросы", project: "Оба", pairs: [
+    ["Greenplum", "сложные джойны в хранилище"], ["ClickHouse", "быстрые агрегаты для дашбордов"],
+    ["Iceberg", "дешёвая полная история в S3"], ["dbt", "SQL-модели с тестами и lineage"] ] }
+];
+window.Q = window.Q || [];
+
+</script>
+<script>
+// Разделы 1–3: проект и команда, Kafka и источники, Spark Streaming.
+Q.push(
+{ id: "u1-1", u: 1, l: 1, q: "Расскажите о проекте в двух словах.",
+  a: "Платформа данных ⟨company⟩: я работала в доменной команде «⟨domain⟩». Мы собирали события заказов и остатков из Kafka, стримом на Spark писали их в Iceberg на S3 и в ClickHouse, а ночью Airflow пересобирал из сырого слоя точный факт заказов, витрины и ML-признаки. Потребители — операционные дашборды, аналитики и ML.",
+  m: "Объёмы: ⟨events⟩ событий заказов в сутки. Свежие данные — за минуты через стрим, точные — раз в сутки через батч. Проверки качества стояли перед публикацией витрин.",
+  k: ["доменная команда внутри платформы", "Kafka → Spark Streaming → Iceberg и ClickHouse", "ночной батч в Airflow", "потребители: дашборды, аналитики, ML"],
+  t: "Не начинай с перечисления технологий. Сначала — что за бизнес и зачем данные.",
+  f: { q: "Почему было и стриминговое, и батчевое ядро?", a: "Стрим давал свежесть за минуты для операционки, батч — точность: учёт поздних событий, дедуп по всей истории и проверки качества перед публикацией." },
+  mc: { ok: "Стрим писал сырые события в Iceberg и ClickHouse, батч пересобирал точные таблицы", no: ["Батч писал в Kafka, стрим читал из ClickHouse", "Всё считалось одним стримом без батча"] },
+  w: ["Iceberg", "ClickHouse", "Airflow"] },
+
+{ id: "u1-2", u: 1, l: 1, q: "Сколько человек было в команде и кто за что отвечал?",
+  a: "В доменной команде «⟨domain⟩» было ⟨team⟩ человек: ⟨de⟩ дата-инженера, тимлид и аналитик домена. Моя зона — стрим заказов, факт заказов, витрины заказов в ClickHouse и проверки качества по заказам. Остатки и ML-признаки вели коллеги, кластеры Kafka, Spark, ClickHouse и Airflow — платформенная команда.",
+  m: "Тимлид отвечал за приоритеты и архитектуру домена, аналитик — за требования и приёмку цифр. Код друг друга мы ревьюили, на дежурстве чинили любой пайплайн домена.",
+  k: ["⟨team⟩ человек: ⟨de⟩ DE, тимлид, аналитик", "моя зона конкретно", "что вели коллеги", "что делала платформа"],
+  t: "Не говори «я построила платформу данных» — ты строила домен на платформе.",
+  f: { q: "Если упал кластер ClickHouse — кто чинит?", a: "Платформа. Я эскалирую в их on-call, а после восстановления догружаю и проверяю данные домена." },
+  mc: { q: "Кто отвечал за схему событий заказа?", ok: "Бэкенд сервиса заказов", no: ["Я как основной потребитель", "Платформенная команда"] },
+  w: ["тимлид", "аналитик"] },
+
+{ id: "u1-3", u: 1, l: 1, q: "Что делала лично ты, а что — платформенная команда?",
+  a: "Платформа держала инфраструктуру: кластеры Kafka и ClickHouse, Spark Operator в Kubernetes, Airflow как сервис, Trino, каталог Iceberg и S3. Я отвечала за данные домена на этой инфраструктуре: стрим заказов, DAG домена, схемы таблиц домена, проверки качества, метрики и алерты своих пайплайнов.",
+  m: "Граница простая: всё, что в коде джобы, DDL таблицы и SQL запроса, я правила сама. Всё, что в конфиге кластера, квотах и обновлениях, — заявка в платформу.",
+  k: ["платформа — кластеры и сервисы", "я — данные домена", "граница: код и DDL против конфигов кластера"],
+  t: "Не приписывай себе администрирование кластеров.",
+  mc: { q: "Что из этого была твоя зона?", ok: "Ключ сортировки таблицы домена в ClickHouse", no: ["Обновление версии кластера ClickHouse", "Квоты неймспейса в Kubernetes"] },
+  w: ["платформа", "DDL"] },
+
+{ id: "u1-4", u: 1, l: 1, q: "Кто был потребителями данных и какие у них требования?",
+  a: "Операционный центр и менеджеры дарксторов смотрели нагрузку в реальном времени — им нужна свежесть в минуты. Аналитики смотрели GMV, отмены и время доставки — им нужна точность за сутки. ML-команды брали признаки для прогноза спроса и ETA. Финансы сверяли выручку — до рубля.",
+  m: "Поэтому горячие таблицы в ClickHouse обновлялись раз в минуту, а точные витрины — ночью после проверок качества.",
+  k: ["операционка — минуты", "аналитики — сутки, точность", "ML — признаки", "финансы — сверка"],
+  mc: { q: "Кому была критична свежесть в минуты?", ok: "Операционному центру и менеджерам дарксторов", no: ["Финансам для сверки выручки", "ML-командам для обучения моделей"] },
+  w: ["свежесть", "точность"] },
+
+{ id: "u1-5", u: 1, l: 1, q: "Какие потоки данных были в проекте?",
+  a: "Три потока. Заказы — смена статусов от создания до доставки или отмены, ⟨events⟩ событий в сутки. Остатки — изменения доступного количества SKU в дарксторе. Пользовательские события приложения — клики и корзина, их вела соседняя команда. Я работала с заказами и остатками.",
+  m: "Заказы важны по точности и порядку, остатки — по последнему состоянию и истории на конец дня, события приложения — объёмом и шумом: дубли, боты, офлайн.",
+  k: ["заказы", "остатки", "события приложения — соседи", "моя часть — заказы и остатки"],
+  mc: { q: "Чем особенны данные об остатках?", ok: "Важно последнее состояние и снимок на конец дня", no: ["Важен порядок событий одного заказа", "Их больше всего по объёму"] },
+  w: ["остатки", "заказы"] },
+
+{ id: "u1-6", u: 1, l: 1, q: "Как была устроена работа команды?",
+  a: "Спринты по две недели, задачи в Jira, приоритеты от тимлида и аналитика домена. Каждый merge request ревьюил минимум один коллега, без зелёного CI мерж был закрыт. Дежурили по домену — ⟨oncall⟩, дежурный отвечал за все пайплайны домена, а не только за свои.",
+  m: "Запросы в платформу — новый топик, квота, права — шли через тикет. Изменения схем событий бэкенд должен был согласовывать с доменом до релиза.",
+  k: ["спринты и Jira", "ревью и CI перед мержем", "дежурства ⟨oncall⟩", "запросы в платформу через тикет"],
+  mc: { q: "За что отвечал дежурный домена?", ok: "За все пайплайны домена", no: ["Только за свои джобы", "За кластер Kafka"] },
+  w: ["ревью", "Дежурили"] },
+
+{ id: "u1-7", u: 1, l: 2, q: "С какими командами ты взаимодействовала и по каким вопросам?",
+  a: "С бэкендом сервиса заказов — по формату событий и изменениям схемы. С платформой — по топикам, квотам, ресурсам и инфраструктурным инцидентам. С ML — по составу признаков. С аналитиками — по требованиям к витринам и расхождениям в цифрах. С SRE — по алертам и мониторингу.",
+  m: "Самое важное взаимодействие — с бэкендом: после инцидента со сменой схемы договорились об обязательной проверке совместимости в их CI.",
+  k: ["бэкенд — схема событий", "платформа — ресурсы и инфраструктура", "ML — признаки", "аналитики — требования и расхождения"],
+  mc: { q: "С кем согласовывали изменения формата событий?", ok: "С бэкендом сервиса заказов", no: ["С аналитиками", "С SRE"] },
+  w: ["бэкенд", "аналитиками"] },
+
+{ id: "u1-8", u: 1, l: 2, q: "Почему данные хранились и в Iceberg, и в ClickHouse?",
+  a: "У них разные задачи. ClickHouse — скорость: дашборд по дарксторам открывается за доли секунды, но хранить там годы истории дорого, поэтому горячий слой держал ⟨ttl⟩. Iceberg на S3 — полнота и цена: вся история, транзакции, time travel и возможность пересчитать любой день.",
+  m: "Сырые события из стрима шли в оба места. Точные витрины ночной батч собирал из Iceberg и публиковал в ClickHouse.",
+  k: ["ClickHouse — скорость, ⟨ttl⟩", "Iceberg — вся история и пересчёты", "ночные витрины из Iceberg в ClickHouse"],
+  f: { q: "Почему не держать всё в ClickHouse?", a: "Годы истории в ClickHouse дорогие, нет удобного time travel и пересчётов, а для ML и пересчётов нужен дешёвый полный слой, который читают Spark и Trino." },
+  mc: { ok: "ClickHouse для быстрых дашбордов, Iceberg для полной истории и пересчётов", no: ["ClickHouse для истории, Iceberg для дашбордов", "Это дублирование ради резервной копии"] },
+  w: ["time travel", "горячий слой"] },
+
+{ id: "u2-1", u: 2, l: 2, q: "Как события заказов попадали в Kafka?",
+  a: "Через transactional outbox. Сервис заказов в одной транзакции менял статус заказа и записывал событие в таблицу outbox своей базы. Фоновый воркер внутри сервиса — relay — забирал новые строки и публиковал их в топик `orders.v1` с ключом `order_id`. Это зона бэкенда.",
+  m: "Так событие не теряется, если сервис упал между изменением заказа и отправкой. Цена — возможные повторы, поэтому в каждом событии `event_id`, и на моей стороне был дедуп.",
+  k: ["outbox в той же транзакции", "relay публикует в Kafka", "ключ order_id", "возможны дубли → дедуп"],
+  f: { q: "А почему не отправлять сразу из кода сервиса?", a: "База и Kafka — две системы, атомарно записать в обе нельзя. При падении между записями событие потеряется." },
+  mc: { ok: "Сервис писал событие в outbox в той же транзакции, relay переносил в Kafka", no: ["Debezium читал изменения таблицы заказов", "Spark раз в минуту читал базу сервиса"] },
+  o: ["Сервис меняет статус заказа", "В той же транзакции пишет событие в outbox", "Relay забирает неотправленные строки", "Relay публикует в orders.v1", "Relay помечает строки отправленными"],
+  w: ["outbox", "relay"] },
+
+{ id: "u2-2", u: 2, l: 2, q: "Что такое transactional outbox и зачем он нужен?",
+  a: "Это способ надёжно отправить событие, когда сервис одновременно меняет данные в своей базе. Событие пишется в таблицу outbox той же базы в той же транзакции, что и бизнес-изменение, а отдельный процесс переносит его в Kafka. Решает проблему двойной записи: без outbox база и Kafka могут разойтись.",
+  m: "Outbox меняет «событие может потеряться» на «событие может прийти дважды». Потерю потом не найти, дубль легко убрать по event_id.",
+  k: ["проблема двойной записи", "одна транзакция с бизнес-изменением", "отдельный relay", "потеря → дубль"],
+  mc: { q: "Какую проблему решает outbox?", ok: "Расхождение базы и Kafka при падении между записями", no: ["Медленную запись в Kafka", "Дубли событий в Kafka"] },
+  w: ["двойной записи"] },
+
+{ id: "u2-3", u: 2, l: 3, q: "Outbox — это CDC? Чем он отличается от Debezium?",
+  a: "Нет. CDC пассивно ловит изменения строк бизнес-таблиц из журнала базы, и потребитель зависит от внутренней структуры таблиц сервиса. Outbox — активный способ: сервис сам решает, какое бизнес-событие опубликовать, и таблица outbox становится контрактом. Debezium может быть способом доставки outbox, если читает журнал только таблицы outbox.",
+  m: "У нас relay был polling-воркером внутри сервиса. От CDC отказались, чтобы не завязываться на внутренние таблицы и не держать слоты репликации на продовых базах: если коннектор встанет, WAL копится и заполняет диск.",
+  k: ["CDC — изменения строк таблиц", "outbox — бизнес-событие как контракт", "Debezium может читать только outbox", "риск слотов репликации"],
+  t: "Если в реальном проекте был Debezium — говори про Debezium, это частый уточняющий вопрос.",
+  mc: { ok: "CDC отдаёт изменения строк, outbox — бизнес-события, которые сервис публикует сам", no: ["Это одно и то же", "Outbox работает без базы данных"] },
+  w: ["CDC", "WAL"] },
+
+{ id: "u2-4", u: 2, l: 2, q: "Как были организованы топики?",
+  a: "Свой топик на поток: `orders.v1` с ключом `order_id` и ⟨p_orders⟩ партициями, `stock.v1` с ключом `store_id:sku` и ⟨p_stock⟩ партициями, `app.events` с ключом `device_id` и ⟨p_app⟩ партициями. Для текущих остатков был ещё compacted-топик `stock.state.v1`. Репликация 3, `min.insync.replicas` 2, хранение заказов ⟨ret⟩.",
+  m: "Суффикс версии в имени — версия контракта: несовместимое изменение схемы означало новый топик. Кластер и создание топиков — платформа, параметры для заказов выбирали вместе.",
+  k: ["топик на поток", "ключи и число партиций", "репликация 3, ISR 2", "версия в имени — контракт"],
+  mc: { q: "Зачем `.v1` в имени топика?", ok: "Несовместимое изменение схемы — новый топик", no: ["Это номер кластера Kafka", "Так требует Spark"] },
+  w: ["compacted", "min.insync.replicas"] },
+
+{ id: "u2-5", u: 2, l: 2, q: "Почему ключом партиционирования был order_id?",
+  a: "Kafka гарантирует порядок только внутри партиции, а партиция выбирается по хэшу ключа. С ключом `order_id` все события одного заказа лежат в одной партиции по очереди, и created не обгонит paid. `store_id` не подходил: крупный даркстор сделал бы партицию горячей.",
+  m: "Для событий приложения ключ — `device_id`: у неавторизованных пользователей `user_id` пустой, и всё ушло бы в одну партицию.",
+  k: ["порядок только внутри партиции", "hash(key) % N", "все события заказа по порядку", "store_id дал бы перекос"],
+  mc: { q: "Почему не store_id?", ok: "Крупный даркстор сделал бы партицию горячей", no: ["store_id нельзя использовать как ключ", "Тогда пропал бы порядок внутри заказа"] },
+  w: ["горячей", "хэшу"] },
+
+{ id: "u2-6", u: 2, l: 3, q: "Как выбирали число партиций и можно ли добавить их потом?",
+  a: "Число партиций определяет не пропускную способность, а параллелизм потребителей: в группе не может быть потребителей больше, чем партиций, а Spark делает одну задачу на партицию. ⟨events⟩ событий в сутки — это десятки в секунду, хватило бы и одной, поэтому ⟨p_orders⟩ взяли с запасом. Добавлять потом неприятно: меняется `hash % N`, и порядок событий части заказов временно нарушается.",
+  m: "Поэтому число партиций сразу берут с запасом, а увеличение делают осознанно, понимая эффект переходного периода.",
+  k: ["партиции = параллелизм потребителей", "одна задача Spark на партицию", "запас на рост", "увеличение ломает раскладку ключей"],
+  mc: { q: "Что будет, если увеличить число партиций?", ok: "Ключи перераспределятся, порядок части заказов временно нарушится", no: ["Kafka перенесёт старые сообщения автоматически", "Ничего, порядок сохранится"] },
+  w: ["параллелизм"] },
+
+{ id: "u2-7", u: 2, l: 2, q: "Как был устроен формат события?",
+  a: "Общий конверт плюс полезная нагрузка: `event_id`, `event_type`, `schema_version`, `event_ts`, `produced_ts` и `payload` с полями заказа. `event_ts` — когда событие произошло, по нему окна, watermark и выбор последнего статуса. `produced_ts` — когда ушло в Kafka, разница показывает задержки доставки.",
+  m: "`event_id` — ключ дедупликации. `schema_version` нужна для эволюции схемы. Формат — JSON, схема — в Schema Registry.",
+  k: ["event_id — дедуп", "event_ts против produced_ts", "schema_version", "payload с полями заказа"],
+  mc: { q: "По какому времени выбирали последний статус?", ok: "event_ts — время события", no: ["produced_ts — время публикации", "Время прихода в Kafka"] },
+  w: ["event_ts", "produced_ts"] },
+
+{ id: "u2-8", u: 2, l: 2, q: "Что такое Schema Registry и как вы его использовали?",
+  a: "Сервис, который хранит схемы событий и не даёт зарегистрировать несовместимую версию. Исходники схем лежали в Git у бэкенда, CI проверял обратную совместимость: добавить поле со значением по умолчанию можно, переименовать или поменять тип — нельзя. Несовместимое изменение — через новую версию топика.",
+  m: "Сам Registry держала платформа, Confluent хранит схемы в служебном compacted-топике `_schemas`. Проверку совместимости в CI бэкенда сделали обязательной после инцидента с переименованием поля.",
+  k: ["хранит схемы", "проверка совместимости BACKWARD", "что можно и что нельзя", "добавили в CI после инцидента"],
+  mc: { q: "Какое изменение схемы совместимо в режиме BACKWARD?", ok: "Добавить поле со значением по умолчанию", no: ["Переименовать order_id в orderId", "Поменять тип суммы на строку"] },
+  w: ["совместимость"] },
+
+{ id: "u2-9", u: 2, l: 3, q: "Откуда берутся дубли, если продюсер идемпотентный?",
+  a: "Идемпотентность продюсера отсекает только повторы от сетевых ретраев внутри одной сессии. Дубли возникают выше: relay outbox отправил событие и упал до отметки «отправлено» — после рестарта отправит снова. Плюс Spark после падения повторяет незакоммиченный батч. Поэтому дедуп по `event_id` нужен всегда.",
+  m: "Доставка в итоге at-least-once, а exactly-once на стороне хранилищ обеспечивали дедуп и идемпотентная запись.",
+  k: ["идемпотентность — только сетевые ретраи", "relay после падения", "повтор батча Spark", "дедуп по event_id"],
+  mc: { ok: "Relay мог отправить событие и упасть до отметки «отправлено»", no: ["Kafka иногда сама дублирует сообщения", "Дублей при идемпотентном продюсере не бывает"] },
+  w: ["at-least-once"] },
+
+{ id: "u3-1", u: 3, l: 2, q: "Как работал стрим заказов по шагам?",
+  a: "Spark Structured Streaming раз в минуту: читал новые offsets из `orders.v1`, не больше ⟨maxoff⟩ сообщений за батч; разбирал JSON по схеме; битые сообщения отправлял в карантин с исходным JSON; убирал дубли по `event_id` в окне ⟨wm⟩; писал годные события в Iceberg `raw.orders_events` и в ClickHouse `order_events`.",
+  m: "Offsets хранились в checkpoint на S3, поэтому после рестарта стрим продолжал с того же места.",
+  k: ["батч раз в минуту", "разбор и карантин", "дедуп по event_id", "запись в Iceberg и ClickHouse", "checkpoint"],
+  o: ["Чтение новых offsets из orders.v1", "Разбор JSON по схеме", "Битые — в карантин", "Дедуп по event_id", "Запись в Iceberg и ClickHouse"],
+  mc: { q: "Что стрим делал с битым JSON?", ok: "Сохранял в карантин с исходным текстом и причиной", no: ["Отбрасывал без следа", "Падал и ждал исправления"] },
+  w: ["карантин", "checkpoint"] },
+
+{ id: "u3-2", u: 3, l: 2, q: "Как стрим запускался и где работал?",
+  a: "Как `SparkApplication` в Kubernetes через Spark Operator, с политикой перезапуска Always. Манифест применяли через `kubectl apply`, оператор делал spark-submit, поднимался под драйвера из нашего образа, драйвер запрашивал поды executors. Стрим работал постоянно, а при падении оператор запускал его заново.",
+  m: "Airflow стрим не запускал — он для задач по расписанию. Батч-джобы, наоборот, запускал Airflow, и их поды жили только на время джобы.",
+  k: ["SparkApplication в Kubernetes", "Spark Operator", "restartPolicy Always", "не Airflow"],
+  mc: { q: "Кто запускал стрим?", ok: "Spark Operator по манифесту SparkApplication", no: ["Airflow раз в минуту", "Cron на отдельной машине"] },
+  o: ["kubectl apply манифеста", "Оператор видит SparkApplication", "Под драйвера из образа", "Драйвер запрашивает executors", "Запросы читают checkpoint и продолжают"],
+  w: ["Spark Operator"] },
+
+{ id: "u3-3", u: 3, l: 3, q: "Как выделялись ресурсы на стрим и как вы их подбирали?",
+  a: "Ресурсы задавались в манифесте: драйвер на 1 ядро и 2 ГБ, ⟨exec⟩, в рамках квоты неймспейса домена от платформы. Подбирали по метрикам: длительность батча должна быть заметно меньше минутного триггера, а число ядер — близко к числу партиций топика. Запускали с запасом и подрезали по факту.",
+  m: "В `orders.v1` ⟨p_orders⟩ партиций, значит ⟨p_orders⟩ задач на чтение: при 6 ядрах — две волны, для нашего объёма нормально. Состояние дедупа — несколько сотен МБ; для больших состояний включают RocksDB state store. Динамическое выделение для стрима не использовали.",
+  k: ["манифест и квота неймспейса", "батч заметно короче триггера", "ядра ≈ партиции", "итеративный подбор"],
+  mc: { q: "Главный признак, что ресурсов не хватает?", ok: "Батч идёт почти столько же, сколько триггер, отставание растёт", no: ["Executors используют 50% CPU", "В топике много партиций"] },
+  w: ["квоты", "RocksDB"] },
+
+{ id: "u3-4", u: 3, l: 2, q: "Что хранится в checkpoint и что происходит при рестарте?",
+  a: "В checkpoint два журнала: `offsets` — какие offsets взяты в батч, пишется до обработки, и `commits` — что батч завершён, пишется после. Плюс состояние, например event_id для дедупа. При рестарте стрим видит последний завершённый батч и продолжает со следующего; незавершённый батч выполняет заново с теми же offsets.",
+  m: "Checkpoint лежал в отдельном бакете `s3a://dp-checkpoints`, у каждого запроса свой.",
+  k: ["offsets до обработки", "commits после", "состояние дедупа", "незавершённый батч повторяется"],
+  mc: { q: "Что Spark сделает с батчем, который есть в offsets, но нет в commits?", ok: "Выполнит заново с теми же offsets", no: ["Пропустит его", "Начнёт с конца топика"] },
+  w: ["offsets", "commits"] },
+
+{ id: "u3-5", u: 3, l: 3, q: "Стрим записал батч в ClickHouse и упал до коммита checkpoint. Что произошло?",
+  a: "После рестарта Spark повторил батч с теми же offsets, и события вставились в `order_events` второй раз. Защита была на стороне ClickHouse: таблица на ReplacingMergeTree, в ключе сортировки `event_id`, и копии события при слиянии частей схлопывались. До слияния дубли видны, поэтому текущий статус считали через `argMax`, а витрины читали с `FINAL`.",
+  m: "Пострадали только оперативные счётчики GMV в материализованном представлении — оно срабатывает на каждую вставку. Заказы там считались через uniqExact и не задваивались, а точный GMV брали из ночной витрины.",
+  k: ["батч повторяется", "ReplacingMergeTree с event_id в ключе", "схлопывание при слиянии", "argMax и FINAL до слияния", "GMV в MV — ограничение"],
+  c: `ENGINE = ReplacingMergeTree(ingested_at)
+PARTITION BY toYYYYMM(event_date)
+ORDER BY (event_date, store_id, event_id)`,
+  f: { q: "Почему не предотвращали саму повторную вставку?", a: "Можно было передавать batch_id как токен дедупликации вставки, но для таблицы событий схлопывания при слиянии и чтения через argMax хватало." },
+  mc: { q: "Что исправляло последствия повторной вставки?", ok: "ReplacingMergeTree с event_id в ключе сортировки", no: ["Kafka не отдавала сообщения повторно", "Spark удалял предыдущую вставку"] },
+  w: ["ReplacingMergeTree", "FINAL"] },
+
+{ id: "u3-6", u: 3, l: 3, q: "Как работал дедуп в стриме и что такое watermark?",
+  a: "Дедуп через `dropDuplicatesWithinWatermark` по `event_id`: стрим помнит идентификаторы событий в пределах watermark ⟨wm⟩. Watermark — это граница «насколько поздние события мы ещё ждём»: максимальный увиденный event_ts минус ⟨wm⟩. Всё, что старше, состояние забывает, иначе память росла бы бесконечно.",
+  m: "Watermark влияет только на операции с состоянием. Сырой слой пишет все события, даже очень поздние, поэтому они не теряются.",
+  k: ["dropDuplicatesWithinWatermark по event_id", "watermark = max event_ts − ⟨wm⟩", "ограничивает память состояния", "сырой слой не теряет поздние"],
+  c: `deduped = (good
+    .withWatermark("event_ts", "2 hours")
+    .dropDuplicatesWithinWatermark(["event_id"]))`,
+  mc: { q: "Зачем нужен watermark при дедупе?", ok: "Ограничить, сколько event_id хранится в состоянии", no: ["Чтобы отбрасывать поздние события из сырого слоя", "Чтобы ускорить чтение из Kafka"] },
+  w: ["watermark", "dropDuplicatesWithinWatermark"] },
+
+{ id: "u3-7", u: 3, l: 2, q: "Что такое карантин и где он хранился?",
+  a: "Таблица Iceberg `raw.orders_quarantine`, куда стрим писал сообщения, не прошедшие разбор: исходный JSON, партиция и offset в Kafka, причина и время. Хранилась в озере рядом с сырыми событиями, а не в ClickHouse: читают её редко, хранить нужно долго и без потерь, а перепроигрывает её Spark.",
+  m: "Рост карантина ловил алерт — обычно это означает, что источник сменил схему.",
+  k: ["Iceberg raw.orders_quarantine", "исходный JSON и offset", "причина отказа", "алерт на рост"],
+  mc: { q: "Почему карантин в Iceberg, а не в ClickHouse?", ok: "Читают редко, хранить долго, перепроигрывает Spark", no: ["ClickHouse не умеет хранить JSON", "Так быстрее для дашбордов"] },
+  w: ["карантин"] },
+
+{ id: "u3-8", u: 3, l: 3, q: "Как выкатывали изменения стрима и какие правки несовместимы с checkpoint?",
+  a: "Через MR и CI, после мержа собирался образ, а деплой стрима был ручным шагом в пайплайне: новый образ стартовал с того же checkpoint, перерыв — минута-две. Безопасны правки разбора, фильтров, ресурсов и триггера. Новая колонка — сначала DDL, потом стрим. Изменение ключей дедупа, watermark или источника несовместимо с состоянием — нужен новый checkpoint со стартом с последнего обработанного offset.",
+  m: "Имя запроса не меняли — на нём метрики и алерты. Откат — тот же деплой с предыдущим тегом образа.",
+  k: ["ручной деплой после мержа", "тот же checkpoint", "DDL перед новой колонкой", "дедуп/источник — новый checkpoint"],
+  mc: { q: "Какая правка требует нового checkpoint?", ok: "Изменение ключей дедупа", no: ["Новая логика разбора поля", "Увеличение числа executors"] },
+  w: ["checkpoint", "DDL"] },
+
+{ id: "u3-9", u: 3, l: 3, q: "Почему в стриме было три запроса с разными checkpoint?",
+  a: "Запись в Iceberg, карантин и ClickHouse — разные приёмники с разными гарантиями. Iceberg и карантин писались exactly-once через checkpoint и атомарный коммит Iceberg, ClickHouse — at-least-once через foreachBatch. Раздельные запросы изолируют сбои: проблема ClickHouse не останавливает запись сырых событий в озеро.",
+  m: "Цена — каждый запрос читает Kafka отдельно. Для нашего объёма это не проблема. Если любой запрос падал, приложение завершалось и оператор перезапускал всё с checkpoint.",
+  k: ["разные гарантии приёмников", "изоляция сбоев", "каждый читает Kafka сам", "перезапуск с checkpoint"],
+  mc: { ok: "Чтобы сбой ClickHouse не останавливал запись в озеро", no: ["Spark не умеет писать в два места", "Так меньше нагрузка на Kafka"] },
+  w: ["exactly-once", "foreachBatch"] }
+);
+
+</script>
+<script>
+// Разделы 4–6: Iceberg/ClickHouse/Trino, Airflow и батч, корректность данных.
+Q.push(
+{ id: "u4-1", u: 4, l: 2, q: "Что такое Iceberg своими словами?",
+  a: "Открытый формат таблиц поверх файлов в объектном хранилище. Данные лежат в Parquet в S3, а рядом Iceberg хранит метаданные: схему, партиционирование, список файлов и историю снапшотов. Это даёт папке с файлами свойства таблицы: атомарную запись, эволюцию схемы, MERGE, time travel и отсечение лишних файлов при чтении.",
+  m: "Iceberg — не база и не движок: это спецификация и библиотеки, встроенные в Spark и Trino. У нас Spark писал в Iceberg сырые события, факт и историю, аналитики читали через Trino.",
+  k: ["формат таблиц, не движок", "Parquet в S3 + метаданные", "атомарность, MERGE, time travel", "Spark пишет, Trino читает"],
+  mc: { ok: "Формат таблиц: метаданные поверх Parquet-файлов в S3", no: ["Распределённая база данных со своим сервером", "Колоночный формат файла вместо Parquet"] },
+  w: ["Parquet", "снапшотов"] },
+
+{ id: "u4-2", u: 4, l: 2, q: "Как было устроено хранилище в S3?",
+  a: "Один бакет под озеро, внутри неймспейсы по слоям: `raw`, `dwh`, `history`, `features`. Каждая таблица — папка с метаданными Iceberg и Parquet-файлами по партициям. Каталог Hive Metastore хранил указатель на текущее описание каждой таблицы; Spark и Trino смотрели в один каталог. Checkpoint-ы стримов лежали в отдельном бакете — это не таблицы.",
+  m: "Бакеты, доступы и каталог — платформа. Таблицы домена я создавала сама через DDL в репозитории.",
+  k: ["бакет и неймспейсы по слоям", "таблица = metadata/ + data/", "каталог Hive Metastore", "checkpoint-ы отдельно"],
+  mc: { q: "Что хранит каталог Iceberg?", ok: "Указатель на текущий metadata.json таблицы", no: ["Сами Parquet-файлы", "Копию всех данных для быстрого чтения"] },
+  w: ["неймспейсы", "Hive Metastore"] },
+
+{ id: "u4-3", u: 4, l: 3, q: "Как проходит запись в Iceberg и почему читатели не видят половину записи?",
+  a: "Spark пишет новые Parquet-файлы, затем новый манифест, список манифестов и новую версию metadata.json. Последний шаг — атомарная смена указателя в каталоге со старой версии на новую, и только если там всё ещё старая. До этого шага читатели видят прошлую версию таблицы, после — новую.",
+  m: "Если джоба упала до смены указателя, таблица не изменилась, а недописанные файлы уберёт очистка. При конкурентной записи вторая джоба перечитает описание и повторит коммит.",
+  k: ["новые файлы и метаданные", "атомарная смена указателя", "до коммита видна старая версия", "мусор убирает очистка"],
+  o: ["Пишутся новые Parquet-файлы", "Пишется манифест", "Пишется список манифестов — снапшот", "Пишется новый metadata.json", "Каталог атомарно меняет указатель"],
+  mc: { q: "Какой шаг записи атомарный?", ok: "Смена указателя в каталоге", no: ["Запись Parquet-файла", "Запись манифеста"] },
+  w: ["указателя", "манифест"] },
+
+{ id: "u4-4", u: 4, l: 2, q: "Зачем нужны компакция и очистка снапшотов?",
+  a: "Стрим каждую минуту добавляет мелкие файлы — за месяц их сотни тысяч, и Trino дольше планирует запрос, чем читает. Компакция `rewrite_data_files` склеивает их в крупные. Очистка `expire_snapshots` удаляет старые снапшоты и файлы, на которые никто не ссылается, иначе хранилище растёт. Это делал ночной DAG `domain_maintenance`.",
+  m: "Time travel работает только в пределах непросроченных снапшотов, поэтому срок хранения снапшотов — компромисс между возможностью отката и ценой хранения.",
+  k: ["мелкие файлы от стрима", "rewrite_data_files", "expire_snapshots", "domain_maintenance в 04:30"],
+  c: `CALL lake.system.rewrite_data_files(
+  table => 'raw.orders_events',
+  where => "event_ts >= '2026-10-09'")`,
+  mc: { q: "Что делает expire_snapshots?", ok: "Удаляет старые снапшоты и неиспользуемые файлы", no: ["Склеивает мелкие файлы", "Удаляет старые партиции данных"] },
+  w: ["rewrite_data_files", "expire_snapshots"] },
+
+{ id: "u4-5", u: 4, l: 2, q: "Какие таблицы домена были в ClickHouse?",
+  a: "Горячие, которые пишут стримы: `order_events` — события заказов и `stock_current` — текущие остатки. Оперативные счётчики `store_hourly_agg`, которые считает материализованное представление. Витрины, которые пишет батч: `orders_hourly` каждый час, `orders_daily_by_store` и `stock_oos` раз в сутки, справочник `dim_stores`. Всё в базе `marts`, горячий слой с TTL ⟨ttl⟩.",
+  m: "Сырые события, карантин, факт заказов, история остатков и признаки лежали не в ClickHouse, а в Iceberg.",
+  k: ["горячие: order_events, stock_current", "MV → store_hourly_agg", "витрины батча", "TTL ⟨ttl⟩"],
+  mc: { q: "Какая таблица хранилась в Iceberg, а не в ClickHouse?", ok: "dwh.fct_orders", no: ["order_events", "orders_daily_by_store"] },
+  w: ["marts", "TTL"] },
+
+{ id: "u4-6", u: 4, l: 3, q: "Почему ReplacingMergeTree и в чём его подвох?",
+  a: "ReplacingMergeTree при фоновом слиянии частей оставляет одну строку на ключ сортировки — с максимальной версией. Это делает повторные вставки безопасными. Подвох: слияние асинхронное и только внутри партиции, поэтому до слияния в таблице видны обе версии. Корректность обеспечивают на чтении: `FINAL` или `argMax`.",
+  m: "Ключ дедупа — это ORDER BY, поэтому в таблице событий в него входил event_id. Копии одного события всегда в одной партиции, потому что у них одинаковая дата.",
+  k: ["одна строка на ключ при слиянии", "версия — max", "слияние асинхронное, внутри партиции", "FINAL или argMax на чтении"],
+  mc: { q: "Почему в ClickHouse видны дубли при ReplacingMergeTree?", ok: "Слияние частей асинхронное и ещё не прошло", no: ["Движок не схлопывает строки с одинаковым ключом", "Дубли попали в разные таблицы"] },
+  w: ["FINAL", "argMax"] },
+
+{ id: "u4-7", u: 4, l: 2, q: "Как считался текущий статус заказа в ClickHouse?",
+  a: "Через `argMax(status, event_ts)` по таблице событий — статус события с максимальным временем события. Порядок вставки не важен: позднее событие с более ранним `event_ts` результат не меняет, а дубли не мешают.",
+  m: "Для поиска истории одного заказа у таблицы была проекция с сортировкой по order_id.",
+  k: ["argMax(status, event_ts)", "порядок вставки не важен", "устойчиво к дублям"],
+  c: `SELECT order_id, argMax(status, event_ts) AS current_status
+FROM marts.order_events
+WHERE event_date >= today() - 1
+GROUP BY order_id`,
+  mc: { ok: "argMax(status, event_ts) по событиям", no: ["Последняя вставленная строка", "max(status) по алфавиту"] },
+  w: ["argMax"] },
+
+{ id: "u4-8", u: 4, l: 3, q: "Что такое материализованное представление store_hourly_mv и где хранятся данные?",
+  a: "Это триггер на вставку: каждый раз, когда стрим вставляет пачку в `order_events`, ClickHouse прогоняет её через запрос представления и дописывает результат в таблицу `store_hourly_agg` на AggregatingMergeTree. Само представление данных не хранит. В таблице лежат промежуточные состояния агрегатов, дашборд читает их через `uniqExactMerge` и `sumMerge`.",
+  m: "Подвох: представление видит только вставленную пачку. Повторную вставку оно посчитает дважды, поэтому заказы считали через uniqExact, а точный GMV брали из ночной витрины.",
+  k: ["триггер на вставку", "данные в store_hourly_agg", "AggregatingMergeTree, состояния агрегатов", "видит только пачку"],
+  mc: { q: "Где физически лежат почасовые счётчики?", ok: "В таблице store_hourly_agg", no: ["В самом представлении store_hourly_mv", "В Iceberg"] },
+  w: ["AggregatingMergeTree", "uniqExactMerge"] },
+
+{ id: "u4-9", u: 4, l: 3, q: "Зачем две почасовые таблицы — store_hourly_agg и orders_hourly?",
+  a: "Материализованное представление видит только вставленную пачку и умеет простые счётчики: заказы, отмены, сумму — зато мгновенно. `orders_hourly` раз в час считает SQL из DAG, который видит все события заказа сразу, поэтому умеет время сборки, время доставки и долю опозданий. Каждый запуск пересчитывает два часа, чтобы учесть поздние события.",
+  m: "Повторная вставка за тот же час безопасна: ReplacingMergeTree(updated_at) оставит более свежую строку, дашборд читает с FINAL.",
+  k: ["MV — простые счётчики сразу", "orders_hourly — метрики по нескольким событиям", "пересчёт двух часов", "ReplacingMergeTree(updated_at)"],
+  mc: { q: "Почему время сборки не считали в MV?", ok: "Нужны события paid и assembled одного заказа, а MV видит только пачку", no: ["ClickHouse не умеет считать разницу времени", "Так требовал аналитик"] },
+  w: ["orders_hourly"] },
+
+{ id: "u4-10", u: 4, l: 2, q: "Зачем был Trino и как он читал те же таблицы?",
+  a: "SQL-движок для аналитиков и сервисных задач поверх Iceberg: запросы к истории без поднятия Spark. Он подключён к тому же каталогу Hive Metastore, поэтому видит те же таблицы, что пишет Spark: в Spark `lake.raw.orders_events`, в Trino `iceberg.raw.orders_events`. Кластер держала платформа.",
+  m: "Важный навык — фильтр по колонке партиционирования: тогда Trino по метаданным отсекает лишние файлы. Я разбирала тяжёлые запросы аналитиков к таблицам домена именно на это.",
+  k: ["SQL к Iceberg без Spark", "тот же каталог", "имена каталогов разные", "partition pruning"],
+  mc: { q: "Почему Trino видит те же таблицы, что пишет Spark?", ok: "Оба смотрят в один каталог Iceberg", no: ["Trino копирует данные из Spark", "Spark пишет отдельную копию для Trino"] },
+  w: ["Trino", "отсекает"] },
+
+{ id: "u5-1", u: 5, l: 1, q: "Какие DAG были у домена и по какому расписанию?",
+  a: "Всего ⟨dags⟩ DAG. Основные: `orders_hourly_marts` каждый час в :10, `stock_eod_snapshot` в 00:30, `dim_stores_daily` в 01:00, главный `orders_daily` в 02:00, `stock_oos_marts` в 03:00, `features_orders_daily` по событию после проверок, `domain_maintenance` в 04:30, `orders_reconcile` в 06:00 и ручные `orders_backfill` и перепроигрывание карантина.",
+  m: "Мои — заказы, обслуживание, сверка и ручные. Остатки и признаки вели коллеги, я их ревьюила и чинила на дежурствах.",
+  k: ["главный orders_daily в 02:00", "почасовой в :10", "остатки 00:30 и 03:00", "сверка в 06:00", "ручные backfill и replay"],
+  mc: { q: "Когда запускался orders_daily?", ok: "В 02:00", no: ["В 00:30", "Каждый час"] },
+  w: ["orders_daily"] },
+
+{ id: "u5-2", u: 5, l: 2, q: "Как был устроен orders_daily по задачам?",
+  a: "Четыре задачи: `wait_raw_fresh` — сенсор, что стрим догрузил день; `build_fct_orders` — Spark-джоба, MERGE в факт; `dq_fct_orders` — проверки качества, при провале DAG останавливается; `publish_marts` — Spark-джоба, дневные итоги в ClickHouse. После успешных проверок публикуется Dataset, на него подписан DAG признаков.",
+  m: "Плохие данные не доходят до витрины, потому что публикация стоит после проверок.",
+  k: ["сенсор", "MERGE в факт", "DQ — стоп при провале", "публикация в ClickHouse", "Dataset для признаков"],
+  o: ["wait_raw_fresh", "build_fct_orders", "dq_fct_orders", "publish_marts", "Dataset → features_orders_daily"],
+  mc: { q: "Что будет, если провалилась критичная DQ-проверка?", ok: "publish_marts не запустится, придёт алерт", no: ["Витрина опубликуется с пометкой", "Airflow сам откатит факт"] },
+  w: ["wait_raw_fresh", "publish_marts"] },
+
+{ id: "u5-3", u: 5, l: 2, q: "Что такое логическая дата и какой день считает запуск в 02:00?",
+  a: "Логическая дата — начало интервала данных, за который отвечает запуск. Запуск 13 октября в 02:00 имеет логическую дату 12 октября и считает 12 октября: `ds` = 2026-10-12. Эта дата уходит в Spark-джобу аргументом `--date`.",
+  m: "Отсюда же тонкость для сенсоров между DAG: у DAG в 03:00 и 00:30 логические даты отличаются на 2,5 часа, это нужно учесть в execution_delta.",
+  k: ["логическая дата = начало интервала", "запуск 13-го считает 12-е", "ds → --date"],
+  mc: { q: "Какой день считает запуск 13.10 в 02:00?", ok: "12.10", no: ["13.10", "11.10"] },
+  w: ["ds"] },
+
+{ id: "u5-4", u: 5, l: 3, q: "Как Airflow запускал Spark-джобы?",
+  a: "Через `SparkKubernetesOperator`: задача рендерила шаблон SparkApplication с параметрами джобы и датой, создавала его в Kubernetes, ждала завершения и выводила лог драйвера в Airflow. Поды драйвера и executors жили только на время джобы. Образ — общий для стримов и джоб, версия образа хранилась в переменной Airflow.",
+  m: "Ретраи делал Airflow, поэтому в SparkApplication стояла политика перезапуска Never. Ресурсы под каждую джобу задавались в DAG.",
+  k: ["SparkKubernetesOperator", "шаблон SparkApplication", "поды на время джобы", "ретраи — Airflow"],
+  mc: { q: "Кто делал ретраи batch-джобы?", ok: "Airflow", no: ["Spark Operator", "Сама Spark-джоба"] },
+  w: ["SparkKubernetesOperator"] },
+
+{ id: "u5-5", u: 5, l: 2, q: "Как были настроены ретраи и SLA?",
+  a: "Три ретрая с экспоненциальной задержкой 5, 10, 20 минут — они лечат временные сбои S3 или ClickHouse и безопасны, потому что задачи идемпотентны. Для DQ ретраи выключены: провал проверки — не временный сбой. SLA: витрина готова к 04:00, иначе алерт. После последнего ретрая callback отправлял алерт дежурному.",
+  m: "`max_active_runs=1`, чтобы два запуска не писали в одну таблицу одновременно. В Airflow 3 SLA заменены на Deadline Alerts.",
+  k: ["3 ретрая, экспоненциально", "безопасно из-за идемпотентности", "DQ без ретраев", "SLA к 04:00", "callback дежурному"],
+  mc: { q: "Почему у DQ-задачи нет ретраев?", ok: "Провал проверки — не временный сбой, повтор ничего не изменит", no: ["Airflow не умеет ретраить DQ", "Чтобы быстрее опубликовать витрину"] },
+  w: ["max_active_runs"] },
+
+{ id: "u5-6", u: 5, l: 2, q: "Как делали backfill?",
+  a: "Ручным DAG `orders_backfill` с параметрами `date_from` и `date_to`: он запускал `orders_daily` по одной дате за раз и ждал завершения. Безопасно, потому что каждый шаг перезаписывает свой день: MERGE в факт, перезапись партиций, ReplacingMergeTree в витринах. Поводы: баг в расчёте, новое правило, перепроигрывание карантина, поздние события старше двух дней.",
+  m: "После backfill проверяла DQ и сверку с источником.",
+  k: ["orders_backfill с датами", "по одной дате", "безопасно из-за идемпотентности", "проверка после"],
+  mc: { q: "Почему backfill не задваивает данные?", ok: "Каждый шаг перезаписывает свой период", no: ["Airflow удаляет старые данные перед запуском", "Backfill пишет в отдельную таблицу"] },
+  w: ["backfill"] },
+
+{ id: "u5-7", u: 5, l: 3, q: "Как DAG зависели друг от друга?",
+  a: "Два механизма. Dataset: `dq_fct_orders` при успехе публикует событие «факт обновлён», и на него подписан `features_orders_daily` — признаки стартуют, только когда факт готов и проверен. ExternalTaskSensor: `stock_oos_marts` ждёт `stock_eod_snapshot` того же дня, `orders_reconcile` — проверки `orders_daily`.",
+  m: "Запуск по событию надёжнее расписания: если факт опоздал, признаки подождут, а не посчитаются тихо на неполных данных. Для сенсора нужно учесть разницу логических дат — execution_delta.",
+  k: ["Dataset после DQ", "ExternalTaskSensor", "execution_delta", "по событию надёжнее расписания"],
+  mc: { q: "Почему признаки запускались по Dataset, а не по часам?", ok: "Чтобы не считаться на неполном факте, если он опоздал", no: ["Так быстрее", "Airflow не поддерживает расписание для Spark"] },
+  w: ["Dataset", "ExternalTaskSensor"] },
+
+{ id: "u5-8", u: 5, l: 3, q: "Как сенсор понимал, что стрим догрузил день?",
+  a: "Сенсор через Trino проверял, есть ли в `raw.orders_events` события с `event_ts` после полуночи следующего дня. Если есть — стрим прошёл границу суток, день полный. Фильтр по `event_ts` давал отсечение партиций, поэтому запрос лёгкий. Режим reschedule — пока ждёт, не держит слот воркера; таймаут 3 часа.",
+  m: "Без сенсора факт мог собраться на неполном дне, если стрим отставал.",
+  k: ["Trino по raw.orders_events", "события после полуночи", "pruning по event_ts", "mode reschedule"],
+  mc: { q: "Зачем mode=reschedule у сенсора?", ok: "Не держать слот воркера во время ожидания", no: ["Чтобы перезапускать стрим", "Чтобы ускорить проверку"] },
+  w: ["reschedule"] },
+
+{ id: "u6-1", u: 6, l: 2, q: "Как обеспечивалась идемпотентность?",
+  a: "Каждый шаг перезаписывал свой период, а не дописывал. Факт заказов — `MERGE` по `order_id`, строка обновлялась, только если новое состояние не старее записанного. Снимки и признаки — перезапись партиции дня. Витрины ClickHouse — ReplacingMergeTree, побеждает строка с более свежим `updated_at`. Поэтому ретраи и backfill безопасны.",
+  m: "Сырой слой из стрима писался exactly-once через checkpoint и коммит Iceberg.",
+  k: ["перезапись периода, не append", "MERGE с условием по времени", "overwritePartitions", "ReplacingMergeTree", "ретраи и backfill безопасны"],
+  c: `MERGE INTO lake.dwh.fct_orders t
+USING staged_orders s ON t.order_id = s.order_id
+WHEN MATCHED AND s.last_event_ts >= t.last_event_ts THEN UPDATE SET *
+WHEN NOT MATCHED THEN INSERT *`,
+  f: { q: "А если бы вместо MERGE был INSERT?", a: "Каждый перезапуск дописывал бы заказы ещё раз, и GMV за день удваивался бы." },
+  mc: { q: "Почему ретрай задачи безопасен?", ok: "Джоба перезаписывает свой день", no: ["Airflow не запускает задачу дважды", "Spark сам удаляет дубли"] },
+  w: ["MERGE", "перезапись партиции"] },
+
+{ id: "u6-2", u: 6, l: 2, q: "Откуда берутся дубли и как их убирали на каждом уровне?",
+  a: "Источники: повторы relay outbox, ретраи продюсера, повтор батча Spark после рестарта, повторная отправка из приложения. Защита: дедуп в стриме по `event_id` в окне ⟨wm⟩; дедуп в батче через `row_number` по `event_id`; ReplacingMergeTree с `event_id` в ключе в ClickHouse; в счётчиках MV — `uniqExact` по `order_id`.",
+  m: "Главное условие — уникальный event_id в каждом событии, это договорённость с бэкендом.",
+  k: ["relay, ретраи, повтор батча", "дедуп в стриме", "row_number в батче", "ReplacingMergeTree", "event_id — договорённость с бэкендом"],
+  mc: { q: "Что обязательно должно быть в событии для дедупа?", ok: "Уникальный event_id", no: ["Время прихода в Kafka", "Номер партиции"] },
+  w: ["row_number", "event_id"] },
+
+{ id: "u6-3", u: 6, l: 3, q: "Как обрабатывали поздние события?",
+  a: "Различали время события и время прихода. Сырой слой хранил всё, даже очень поздние. Стриминговые агрегаты с watermark ⟨wm⟩ поздние события пропускали — это допустимо для оперативки. Ночной батч пересчитывал окно последних двух дней и дополнительно находил заказы по времени прихода, поэтому поздние события попадали в факт. Для опозданий больше этого — backfill.",
+  m: "Пример: курьер отметил доставку в 14:05 без связи, событие пришло в 17:10. Оперативный дашборд его не учёл, а ночной факт — учёл.",
+  k: ["event_ts против времени прихода", "raw хранит всё", "батч: окно 2 дня + ingested_at", "старше — backfill"],
+  mc: { q: "Где позднее событие гарантированно не терялось?", ok: "В сыром слое Iceberg", no: ["В почасовых счётчиках MV", "В стриминговом агрегате с watermark"] },
+  w: ["времени прихода"] },
+
+{ id: "u6-4", u: 6, l: 3, q: "Пришёл CANCELLED позже SHIPPED, но сформирован раньше. Какой статус актуален?",
+  a: "Актуальным считали событие с более поздним временем возникновения, а не то, что пришло последним. Сырой слой хранил оба события, в ClickHouse текущий статус — `argMax(status, event_ts)`, а MERGE в факте обновлял строку, только если событие новее записанного. Поэтому поздний CANCELLED попадал в историю, но не перезаписывал SHIPPED.",
+  m: "Сама ситуация значит, что события пишут разные продюсеры или нарушен порядок в relay. Пара «отмена рядом с отгрузкой» ловилась DQ как бизнес-аномалия.",
+  k: ["по event_ts, не по приходу", "argMax в ClickHouse", "MERGE с условием", "аномалия в DQ"],
+  f: { q: "В чём слабое место event_ts?", a: "Часы разных сервисов могут расходиться. Надёжнее сравнивать по версии заказа, которую источник увеличивает в той же транзакции." },
+  mc: { ok: "SHIPPED — у него более поздний event_ts", no: ["CANCELLED — оно пришло последним", "Отмена всегда важнее"] },
+  w: ["argMax"] },
+
+{ id: "u6-5", u: 6, l: 3, q: "Как работал инкремент при сборке факта заказов?",
+  a: "Не пересчитывали всю историю. Находили заказы, которые менялись: событие произошло в окне последних двух дней или пришло в этом окне по `ingested_at` — так ловились и поздние события. Брали все события этих заказов за 30 дней, дедуплицировали, собирали состояние и делали MERGE в факт.",
+  m: "Фильтр по event_ts давал отсечение партиций в Iceberg. Перезапуск за ту же дату даёт тот же результат.",
+  k: ["только изменившиеся заказы", "окно по event_ts и ingested_at", "история заказа 30 дней", "MERGE"],
+  c: `changed = raw.where(
+    f"(event_ts >= {ts(win_start)}) OR "
+    f"(ingested_at >= {ts(win_start)} AND ingested_at < {ts(next_day)})"
+).select("order_id").distinct()`,
+  mc: { q: "Зачем искать изменённые заказы ещё и по ingested_at?", ok: "Чтобы поймать поздние события с давним event_ts", no: ["Чтобы ускорить чтение", "ingested_at точнее event_ts"] },
+  w: ["ingested_at"] },
+
+{ id: "u6-6", u: 6, l: 2, q: "Какие были DQ-проверки и что блокировало публикацию?",
+  a: "Блокировали: дубли `order_id` в факте, пустые ключевые поля, объём заказов ниже ⟨vol_thr⟩ от среднего за 7 дней, доставка раньше создания, расхождение числа заказов в факте и созданных в сыром слое. Предупреждали: отмена и доставка у одного заказа. Результаты всех проверок писались в историю `dq.check_results`.",
+  m: "Провал критичной проверки — код выхода 1, задача падает, витрина не публикуется, дежурному алерт.",
+  k: ["блокирующие и предупреждающие", "дубли, null, объём, порядок времён, сверка с raw", "история проверок", "код выхода 1"],
+  mc: { q: "Какая проверка только предупреждала?", ok: "Отмена и доставка у одного заказа", no: ["Дубли order_id", "Объём ниже порога"] },
+  w: ["dq.check_results"] },
+
+{ id: "u6-7", u: 6, l: 2, q: "Как сверяли данные с источником?",
+  a: "DAG `orders_reconcile` в 06:00 сравнивал GMV доставленных заказов за вчера в факте через Trino с репликой базы сервиса заказов. Расхождение больше ⟨gmv_thr⟩ — задача падала, дежурному алерт, утром разбор. Внутри DQ ещё сравнивали число заказов в факте с созданными в сыром слое.",
+  m: "Сверка ловит то, что не видят внутренние проверки: события, которые вообще не дошли до Kafka.",
+  k: ["orders_reconcile в 06:00", "GMV факта против реплики", "порог ⟨gmv_thr⟩", "ловит недошедшие события"],
+  mc: { q: "Что ловит сверка с источником, чего не ловят DQ внутри пайплайна?", ok: "События, которые не дошли до Kafka", no: ["Дубли в ClickHouse", "Мелкие файлы в Iceberg"] },
+  w: ["orders_reconcile"] },
+
+{ id: "u6-8", u: 6, l: 3, q: "Что бы ты улучшила в выборе последнего статуса заказа?",
+  a: "Сравнивала бы не по `event_ts`, а по версии заказа из источника. Сервис заказов увеличивает `order_version` в той же транзакции, где меняет статус и пишет outbox. Это не зависит от часов разных сервисов, которые могут расходиться на секунды. Тогда в MERGE условие было бы по версии.",
+  m: "Плюс контракт: все события заказа публикует один сервис, тогда порядок в партиции гарантирован.",
+  k: ["версия из источника", "та же транзакция", "не зависит от часов", "условие MERGE по версии"],
+  c: `WHEN MATCHED AND s.order_version > t.order_version THEN UPDATE SET *`,
+  mc: { ok: "Версия заказа, которую источник увеличивает в транзакции", no: ["Время прихода в Kafka", "Номер offset"] },
+  w: ["order_version"] },
+
+{ id: "u6-9", u: 6, l: 2, q: "Что делали с бизнес-аномалиями, например отменой и доставкой у одного заказа?",
+  a: "Пайплайн не решает, кто прав: он отражает источник, текущий статус — по последнему событию. Но аномалию нужно заметить: DQ-проверка с уровнем предупреждения находила такие заказы, они попадали в отчёт, и мы сообщали бэкенду и аналитику домена. Это могла быть гонка между сервисами или отклонённая отмена.",
+  m: "Приоритет статусов вроде «отмена всегда важнее» не использовали: он ломается на возвратах после доставки.",
+  k: ["пайплайн отражает источник", "DQ-предупреждение", "отчёт бэкенду и аналитику", "без приоритета статусов"],
+  mc: { q: "Почему не использовали правило «отмена всегда важнее»?", ok: "Оно ломается на возвратах после доставки", no: ["Его нельзя реализовать в SQL", "Аналитики запретили"] },
+  w: ["аномалию"] }
+);
+
+</script>
+<script>
+// Разделы 7–9: оптимизация, мониторинг и инциденты, CI/CD и тесты.
+Q.push(
+{ id: "u7-1", u: 7, l: 3, q: "Расскажите про оптимизацию Spark-джобы, которой вы гордитесь.",
+  a: "Джоба признаков по пользовательским событиям: одна задача шла 40 минут, остальные — секунды. В Spark UI увидела перекос: около 30% событий от неавторизованных пользователей с `user_id = 0`. Обработала их отдельной веткой — для признаков они и не нужны в общем джойне, — а для остального включила skew join в AQE. Время ⟨skew_fix⟩.",
+  m: "Важно, что решение основано на понимании данных: откуда вообще нулевой пользователь, а не только на технической настройке.",
+  k: ["симптом в Spark UI", "причина — user_id = 0", "отдельная ветка", "skew join в AQE", "⟨skew_fix⟩"],
+  t: "Рассказывай один случай целиком: как заметила, как нашла причину, что выбрала и почему, результат.",
+  mc: { ok: "Обработать user_id = 0 отдельно и включить skew join", no: ["Увеличить память executors", "Уменьшить число партиций шаффла"] },
+  w: ["skew join", "Spark UI"] },
+
+{ id: "u7-2", u: 7, l: 3, q: "Как понять, что в Spark перекос данных?",
+  a: "В Spark UI на стадии почти все задачи завершаются быстро, а одна-две идут в разы дольше и читают намного больше данных шаффла. В метриках задач — большой разброс между медианой и максимумом по времени и объёму. Дальше смотришь распределение ключа джойна или группировки и находишь «тяжёлое» значение.",
+  m: "Лечение: обработать тяжёлый ключ отдельно, AQE skew join, salting — добавить к ключу случайную соль и размножить маленькую сторону.",
+  k: ["одна задача намного дольше", "медиана против максимума", "распределение ключа", "отдельная ветка, AQE, salting"],
+  c: `SALT = 16
+ev = events.withColumn("salt", (F.rand() * SALT).cast("int"))
+us = users.crossJoin(spark.range(SALT).withColumnRenamed("id", "salt"))
+joined = ev.join(us, ["user_id", "salt"])`,
+  mc: { q: "Что такое salting?", ok: "Добавить к ключу случайную соль, чтобы размазать тяжёлый ключ по задачам", no: ["Сжатие данных шаффла", "Удаление тяжёлого ключа из данных"] },
+  w: ["salting", "медианой"] },
+
+{ id: "u7-3", u: 7, l: 2, q: "Что такое broadcast join и когда вы его использовали?",
+  a: "Маленькая таблица целиком копируется на каждый executor, и большая сторона не шаффлится вообще. Использовали, когда события заказов джойнились со справочником дарксторов на несколько тысяч строк: без подсказки Spark делал sort-merge join с шаффлом обеих сторон.",
+  m: "Порог автоматического broadcast по умолчанию 10 МБ. Опасно бродкастить большую таблицу — драйвер и executors падают по памяти.",
+  k: ["копия маленькой таблицы на executors", "нет шаффла большой стороны", "справочник дарксторов", "не для больших таблиц"],
+  c: `orders.join(F.broadcast(stores), "store_id")`,
+  mc: { ok: "Справочник дарксторов на тысячи строк", no: ["Таблица событий за год", "Две таблицы по миллиарду строк"] },
+  w: ["broadcast"] },
+
+{ id: "u7-4", u: 7, l: 2, q: "Как боролись с мелкими файлами?",
+  a: "Стрим каждую минуту пишет в Iceberg, и за месяц набирались сотни тысяч файлов по сотне килобайт — Trino дольше планировал запрос, чем читал. Увеличили триггер там, где минутная свежесть в озере не нужна, делали `repartition` перед записью и запускали ночную компакцию `rewrite_data_files` для свежих партиций.",
+  m: "Параметры компакции своих таблиц — моя зона, сам механизм обслуживания — платформа.",
+  k: ["причина — частые записи стрима", "симптом — долгое планирование", "repartition перед записью", "ночная компакция"],
+  mc: { q: "Какой симптом мелких файлов?", ok: "Запрос долго планируется, хотя данных немного", no: ["Падает драйвер Spark", "Дублируются строки"] },
+  w: ["repartition", "компакцию"] },
+
+{ id: "u7-5", u: 7, l: 3, q: "Как настраивали партиции шаффла и AQE?",
+  a: "По умолчанию 200 партиций шаффла. На джобе в сотни гигабайт это по несколько гигабайт на задачу — spill на диск и падения по памяти. Включили AQE с целевым размером партиции 256 МБ: Spark сам подбирает число партиций после шаффла и режет перекошенные джойны.",
+  m: "Симптом в Spark UI — большой Shuffle Spill (Disk). Целевой размер партиции — 128–256 МБ.",
+  k: ["200 по умолчанию", "spill и OOM", "AQE, 256 МБ", "Shuffle Spill в Spark UI"],
+  c: `spark.conf.set("spark.sql.adaptive.enabled", "true")
+spark.conf.set("spark.sql.adaptive.advisoryPartitionSizeInBytes", "256m")`,
+  mc: { q: "Какой признак слишком крупных партиций шаффла?", ok: "Большой Shuffle Spill на диск", no: ["Много мелких задач", "Низкая загрузка CPU"] },
+  w: ["AQE", "spill"] },
+
+{ id: "u7-6", u: 7, l: 3, q: "Как оптимизировали таблицы ClickHouse?",
+  a: "Ключ сортировки — главный индекс, поэтому выбирали его под частые фильтры: `(event_date, store_id, event_id)`. Для поиска по одному заказу добавили projection с сортировкой по `order_id`. Дашборд по часам переводили на готовые агрегаты материализованного представления вместо сырых событий. Статусы и коды — `LowCardinality`, без лишних Nullable.",
+  m: "Запрос саппорта по заказу после projection — секунды вместо минут, дашборд — меньше секунды.",
+  k: ["ORDER BY под фильтры", "projection по order_id", "MV вместо сырых событий", "LowCardinality"],
+  mc: { q: "Чем помогает projection?", ok: "Даёт другой порядок сортировки для другого типа запросов", no: ["Удаляет дубли", "Сжимает старые партиции"] },
+  w: ["projection", "LowCardinality"] },
+
+{ id: "u7-7", u: 7, l: 2, q: "Что такое ошибка Too many parts и как её избегали?",
+  a: "Каждая вставка в ClickHouse создаёт отдельную часть, которые потом сливаются в фоне. Если вставлять слишком часто мелкими порциями, слияния не успевают, и ClickHouse отказывается принимать вставки. Избегали вставками пачками: стрим писал раз в минуту одним батчем, DAG — одним `INSERT SELECT`.",
+  m: "Если ошибка возникла — убрать источник мелких вставок, слияния догонят сами.",
+  k: ["каждая вставка — часть", "слияния не успевают", "вставки пачками", "раз в минуту"],
+  mc: { ok: "Слишком частые мелкие вставки", no: ["Слишком большие партиции", "Нехватка места на диске"] },
+  w: ["слияния"] },
+
+{ id: "u8-1", u: 8, l: 2, q: "Что мониторили в пайплайнах и какими метриками?",
+  a: "Свежесть горячей витрины: `now() − max(event_ts)`, алерт при ⟨fresh_thr⟩. Отставание стрима от конца топика и длительность батча относительно триггера. Время последнего прогресса — если стрим встал. Рост карантина. Падения и SLA DAG. Метрики стрима отдавал слушатель прогресса Spark на порт драйвера, свежесть — маленький экспортёр.",
+  m: "Стек Prometheus и Grafana держали SRE, метрики, дашборды и правила алертов домена — я.",
+  k: ["свежесть ⟨fresh_thr⟩", "отставание и длительность батча", "рост карантина", "падения и SLA DAG"],
+  mc: { q: "Как считали свежесть горячей витрины?", ok: "now() − max(event_ts)", no: ["Число строк за час", "Время последнего деплоя"] },
+  w: ["свежесть"] },
+
+{ id: "u8-2", u: 8, l: 2, q: "Как приходили алерты и кому?",
+  a: "Некритичное — упавшие DAG, провалы DQ — приходило в канал команды в мессенджере через callback Airflow. Критичное — стрим встал или горячая витрина отстаёт — Alertmanager маршрутизировал дежурному домена через систему дежурств: пуш и звонок. Не подтвердил — эскалация на тимлида. Инфраструктурные сбои — в on-call платформы.",
+  m: "Ночью звонят только по тому, что нельзя отложить до утра. Упавший ночной DAG чаще разбирают утром до начала рабочего дня.",
+  k: ["некритичное — канал команды", "критичное — дежурному звонком", "эскалация на тимлида", "инфраструктура — платформа"],
+  t: "Описывай ту схему, что была у тебя реально: интервьюер проверяет понимание, а не идеальную картину.",
+  mc: { q: "Куда уходил алерт об упавшем ночном DAG?", ok: "В канал команды, разбор утром", no: ["Звонок дежурному ночью", "Только в on-call платформы"] },
+  w: ["Alertmanager", "эскалация"] },
+
+{ id: "u8-3", u: 8, l: 1, q: "Как было устроено дежурство?",
+  a: "Дежурили по домену — ⟨oncall⟩. Дежурный отвечал за все пайплайны домена, а не только за свои. Реакция на критичный алерт — 15 минут в рабочее время и 30 в нерабочее. Инфраструктурные проблемы эскалировали в on-call платформы, а не чинили сами. После инцидента с потерей данных или нарушением SLA — постмортем.",
+  m: "Для каждого своего DAG был runbook: что можно перезапустить, что проверить, кого звать.",
+  k: ["⟨oncall⟩", "все пайплайны домена", "время реакции", "эскалация в платформу", "runbook"],
+  mc: { q: "Что делать дежурному домена, если упал кластер Kafka?", ok: "Эскалировать в on-call платформы", no: ["Перезапустить брокеры самой", "Ждать утра"] },
+  w: ["runbook"] },
+
+{ id: "u8-4", u: 8, l: 2, q: "Расскажите о самом сложном production-инциденте, который вы разбирали.",
+  a: "Вечером сработал алерт роста карантина и упали оплаты на дашборде. Сначала проверила отставание стрима — его не было, значит сообщения читались, но не разбирались. В карантине увидела переименованное поле `orderId` после релиза сервиса заказов. Бэкенд откатил релиз. Я поправила разбор под оба формата, перепроиграла карантин — ⟨quar⟩ событий, затем запустила backfill за день и проверила DQ и сверку GMV.",
+  m: "На постмортеме договорились о проверке совместимости схемы в CI бэкенда. Итог: данные не потеряны, дашборд был неточным около двух часов, витрины пересчитаны к утру.",
+  k: ["первая гипотеза и как отсекла", "причина в карантине", "что делала лично", "сначала карантин, потом backfill", "системное исправление"],
+  t: "Рассказывай только реальный случай. Если подходящего нет — возьми меньший, но свой, и разложи по этой схеме.",
+  f: { q: "Откуда backfill взял потерянные события?", a: "Из сырого слоя, куда их вернуло перепроигрывание карантина. Без этого backfill пересчитал бы день без них." },
+  o: ["Алерт роста карантина", "Проверка отставания стрима", "Исходный JSON в карантине", "Откат релиза бэкендом", "Правка разбора", "Перепроигрывание карантина", "Backfill и проверка", "Постмортем"],
+  mc: { q: "Что нужно сделать до backfill?", ok: "Перепроиграть карантин", no: ["Перезапустить стрим", "Очистить витрину в ClickHouse"] },
+  w: ["карантин", "backfill"] },
+
+{ id: "u8-5", u: 8, l: 3, q: "Как перепроигрывали карантин?",
+  a: "Сначала оценила масштаб: причины, интервал, число сообщений и пример исходного JSON. Откат релиза не чинит уже пришедшие сообщения, поэтому научила разбор понимать оба формата и проверила тестом на реальных сообщениях. Потом джоба перепроигрывания: разобрала карантин за период, отсекла дубли и уже записанные события по `event_id`, дописала остальное в сырой слой и удалила перепроигранные строки из карантина.",
+  m: "Дальше backfill за дни по event_ts. Отдельно дозаписала события в ClickHouse и перезапустила почасовые витрины за вечер.",
+  k: ["оценка масштаба", "разбор под оба формата + тест", "дедуп и anti-join по event_id", "удаление из карантина", "backfill и ClickHouse"],
+  c: `F.coalesce(F.col("e.payload.order_id"), F.col("e.payload.orderId")).alias("order_id"),
+F.col("e.payload.total_amount").cast("decimal(12,2)").alias("total_amount"),`,
+  mc: { q: "Почему после отката битые сообщения сами не починились?", ok: "В карантине лежат уже пришедшие сообщения со старым форматом", no: ["Откат не применился", "Карантин очищается при откате"] },
+  w: ["уже записанные"] },
+
+{ id: "u8-6", u: 8, l: 3, q: "Почему отставание Spark-стрима не видно в kafka-exporter?",
+  a: "Spark Structured Streaming хранит offsets в своём checkpoint и не коммитит их в consumer group Kafka. Стандартный экспортёр смотрит именно на коммиты групп, поэтому отставание стрима не видит. Брали метрику из самого Spark: источник Kafka отдаёт в прогрессе `maxOffsetsBehindLatest`, её экспортировали в Prometheus.",
+  m: "Это частая ошибка в настройке мониторинга стримов.",
+  k: ["offsets в checkpoint", "нет коммитов в consumer group", "maxOffsetsBehindLatest", "экспорт из слушателя прогресса"],
+  mc: { q: "Откуда брали отставание стрима?", ok: "Из метрики maxOffsetsBehindLatest в прогрессе Spark", no: ["Из consumer group в Kafka", "Из логов драйвера"] },
+  w: ["maxOffsetsBehindLatest"] },
+
+{ id: "u8-7", u: 8, l: 1, q: "Как был устроен постмортем?",
+  a: "После инцидента с потерей данных или нарушением SLA дежурный писал постмортем: хронология, влияние, корневая причина, что сделали для восстановления, превентивные меры со сроками и ответственными. Обсуждали на встрече команды и с участниками из других команд. Цель — найти системное решение, а не виноватого.",
+  m: "Если об инциденте узнали от пользователей, а не от алерта, отдельной мерой добавляли алерт.",
+  k: ["хронология и влияние", "корневая причина", "превентивные меры со сроками", "без поиска виноватых"],
+  mc: { q: "Какая главная цель постмортема?", ok: "Найти системное решение, чтобы не повторилось", no: ["Определить виноватого", "Посчитать премию дежурного"] },
+  w: ["постмортем"] },
+
+{ id: "u9-1", u: 9, l: 2, q: "Как был устроен CI/CD?",
+  a: "На каждый merge request GitLab CI запускал линтер, юнит-тесты со Spark и проверку загрузки всех DAG — без зелёного CI и аппрува мерж закрыт. После мержа в main собирался Docker-образ, DAG синхронизировались в Airflow, переменная версии образа обновлялась. Стримы выкатывались отдельным ручным шагом.",
+  m: "Один образ для стримов и джоб, тег — хэш коммита. Откат — повторный деплой предыдущего тега.",
+  k: ["CI на каждый MR", "защищённая ветка", "образ и DAG после мержа", "стримы — ручной шаг"],
+  o: ["Ветка и код", "Push и merge request", "CI: линтер, тесты, DAG", "Ревью и аппрув", "Merge → сборка образа", "DAG в Airflow, стрим вручную"],
+  mc: { q: "Почему деплой стрима был ручным?", ok: "Чтобы выкатывать осознанно и сразу проверить первые батчи", no: ["CI не умеет работать с Kubernetes", "Стрим нельзя перезапускать"] },
+  w: ["merge request", "CI"] },
+
+{ id: "u9-2", u: 9, l: 2, q: "Как ты тестировала свой код?",
+  a: "Логику проверяла юнит-тестами на pytest с локальным Spark на маленьких DataFrame: дубли, поздние события, пустые значения, битый JSON. Джобу целиком прогоняла в dev-окружении: читала продовые сырые данные, писала в свой неймспейс и сравнивала результат с продом. Потом push, CI и ревью; первый запуск в проде проверяла сама.",
+  m: "Корректность данных в проде дополнительно контролировали DQ-задачи и сверка с источником.",
+  k: ["юнит-тесты на pytest", "неудобные случаи", "dev-окружение на реальных данных", "сравнение с продом", "проверка первого запуска"],
+  mc: { q: "Как проверяли джобу на реальных данных, ничего не ломая?", ok: "Читали прод, писали в личный dev-неймспейс", no: ["Запускали сразу в прод ночью", "Копировали весь прод на ноутбук"] },
+  w: ["pytest", "неймспейс"] },
+
+{ id: "u9-3", u: 9, l: 2, q: "Приведите пример юнит-теста на Spark.",
+  a: "Тест, что поздняя отмена не перезаписывает доставку: на вход три события одного заказа, отмена с бóльшим offset, но более ранним временем; после сборки состояния финальный статус должен быть delivered. Spark поднимается локально через фикстуру pytest, кластер не нужен.",
+  m: "Ценность таких тестов — они фиксируют правила, и через полгода случайная правка логики будет поймана в CI.",
+  k: ["вход — маленький DataFrame", "вызов функции", "assert результата", "фикстура spark"],
+  c: `def test_late_cancel_does_not_override_delivered(spark):
+    events = spark.createDataFrame([
+        (5, "created",   datetime(2026, 10, 12, 11, 30), 1),
+        (5, "delivered", datetime(2026, 10, 12, 12, 0),  2),
+        (5, "cancelled", datetime(2026, 10, 12, 11, 59), 3),
+    ], "order_id long, status string, event_ts timestamp, kafka_offset long")
+    row = build_order_state(events).collect()[0]
+    assert row.final_status == "delivered"`,
+  mc: { q: "Откуда в тесте берётся spark?", ok: "Из фикстуры pytest в conftest.py", no: ["Подключается к продовому кластеру", "Создаётся в каждом тесте вручную"] },
+  w: ["фикстуру"] },
+
+{ id: "u9-4", u: 9, l: 1, q: "Что такое линтеры и pre-commit?",
+  a: "Линтер читает код, не запуская его, и находит ошибки и нарушения правил: неиспользуемые импорты, опечатки в именах, сомнительные конструкции. Для Python — `ruff`, для SQL — `sqlfluff`. Pre-commit запускает эти проверки автоматически при каждом коммите, а CI повторяет их на сервере.",
+  m: "Форматтер `ruff format` приводит код к единому стилю, чтобы в ревью обсуждать смысл, а не пробелы.",
+  k: ["проверка без запуска", "ruff и sqlfluff", "pre-commit на коммит", "CI повторяет"],
+  mc: { q: "Что поймает линтер?", ok: "Опечатку в имени переменной", no: ["Неверную бизнес-логику расчёта GMV", "Нехватку памяти в Spark"] },
+  w: ["ruff", "sqlfluff"] },
+
+{ id: "u9-5", u: 9, l: 2, q: "На что ты смотрела на код-ревью?",
+  a: "Идемпотентна ли джоба — перезапуск за тот же день даёт тот же результат. Есть ли фильтр по партиции при чтении больших таблиц. Нет ли `collect` и `toPandas` на больших данных. Не сломает ли изменение схемы потребителей таблицы. Есть ли DQ и метрика свежести на новую таблицу. Понятно ли, как откатить и пересчитать.",
+  m: "Ревью было обязательным, минимум один аппрув из команды.",
+  k: ["идемпотентность", "фильтр по партиции", "нет collect на больших данных", "совместимость схемы", "DQ и откат"],
+  mc: { q: "Что опасно увидеть в джобе на ревью?", ok: "collect() по большой таблице", no: ["Фильтр по event_ts", "MERGE по ключу"] },
+  w: ["collect"] },
+
+{ id: "u9-6", u: 9, l: 3, q: "Как проверить, что изменение логики не испортило цифры?",
+  a: "Прогнать старую и новую версию на одних данных в dev-окружении и сравнить результат: число строк, суммы, расхождения по ключам. Для разовых операций в проде — режим пробного прогона, который только считает, сколько строк изменится. После выкатки — DQ и сверка с источником.",
+  m: "Продвинутый вариант для Iceberg — write-audit-publish: пишем в ветку таблицы, проверяем и только потом публикуем. Упоминать как вариант, если реально не использовали.",
+  k: ["сравнение старой и новой версии", "строки, суммы, расхождения", "пробный прогон", "DQ после выкатки"],
+  mc: { ok: "Сравнить результаты старой и новой версии на одних данных", no: ["Положиться на юнит-тесты", "Выкатить и смотреть дашборд"] },
+  w: ["пробного прогона"] }
+);
+
+</script>
+<script>
+// Разделы 10–12: банковский DWH, Greenplum и Hadoop, общие вопросы.
+Q.push(
+{ id: "u10-1", u: 10, l: 1, q: "Расскажите о банковском проекте в двух словах.",
+  a: "Корпоративное хранилище ⟨bank⟩ на Greenplum и Hadoop для клиентской, транзакционной и управленческой аналитики. Данные АБС, карточного процессинга и CRM сводились в единую модель с историей. Я была ETL/DWH-разработчиком в команде доменов «Карты» и «Продукты»: загрузки из процессинга и CRM, DDS и витрины доменов, Spark-пайплайны и сверки.",
+  m: "Главное требование — точность и история: цифры витрин должны совпадать с бухгалтерией, а на вопрос «каким был клиент на дату» должен быть ответ.",
+  k: ["Greenplum и Hadoop", "три источника → единая модель", "моя роль и домены", "точность и история"],
+  mc: { q: "Что было главным требованием к банковскому DWH?", ok: "Точность до рубля и история изменений", no: ["Свежесть данных в секунды", "Минимальная стоимость хранения"] },
+  w: ["Greenplum", "АБС"] },
+
+{ id: "u10-2", u: 10, l: 1, q: "Какие были роли в команде и кто за что отвечал?",
+  a: "Команда доменов — ⟨bteam⟩ человек: ⟨bdev⟩ разработчиков, два системных аналитика и тимлид. Аналитики писали спецификации маппинга S2T, архитектор DWH утверждал модель, DBA администрировали Greenplum, тестировщики проверяли по S2T, группа сопровождения смотрела ночные загрузки. Я реализовывала загрузки, DDS и витрины доменов и была третьей линией поддержки своих загрузок.",
+  m: "Модель DDS я не проектировала — предлагала изменения и реализовывала. Ключ распределения больших таблиц согласовывала с DBA.",
+  k: ["⟨bteam⟩ человек", "аналитики — S2T", "архитектор — модель", "DBA — кластер", "моя зона — реализация"],
+  t: "Не говори, что проектировала модель хранилища, если её утверждал архитектор.",
+  mc: { q: "Кто утверждал модель DDS?", ok: "Архитектор DWH", no: ["Я", "DBA"] },
+  w: ["S2T", "DBA"] },
+
+{ id: "u10-3", u: 10, l: 2, q: "Какие были источники и как каждый попадал в STG?",
+  a: "Три источника, у каждого свой путь. АБС на Oracle — Greenplum читал напрямую через PXF, это вёл соседний домен «Счета». CRM на MS SQL — тоже PXF, инкремент по `updated_at`, это моя зона. Карточный процессинг на PostgreSQL — сначала Spark выгружал день в Hive, потом Greenplum забирал нужные дни из Hive через PXF — тоже моё.",
+  m: "Каждый источник грузился в свою схему STG. Склеивались данные только в DDS.",
+  k: ["Oracle → PXF → stg_abs", "MS SQL → PXF → stg_crm", "PostgreSQL → Spark → Hive → PXF → stg_card", "склейка только в DDS"],
+  o: ["Spark выгружает процессинг в Hive", "PXF забирает CRM в stg_crm", "После опердня PXF забирает АБС", "PXF забирает свежие дни из Hive", "DDS склеивает три системы"],
+  mc: { q: "Как в STG попадали карточные операции?", ok: "Через Hadoop: Spark в Hive, потом PXF в Greenplum", no: ["Напрямую через PXF из PostgreSQL", "Через Kafka"] },
+  w: ["PXF", "Hive"] },
+
+{ id: "u10-4", u: 10, l: 2, q: "Зачем Hadoop, если есть Greenplum?",
+  a: "Карточные операции — ⟨card_day⟩ строк в сутки и ⟨hist⟩ истории, миллиарды строк. Хранить всё в Greenplum дорого, а Data Science нужна вся история. Поэтому полная история жила в Hive в Parquet, а в Greenplum попадали только свежие дни для витрин. Плюс Hadoop был площадкой для тяжёлых расчётов — признаков для скоринга по 12 месяцам операций.",
+  m: "Кластер Hadoop держала big data платформа, Spark-джобы и Hive-таблицы домена — моя зона.",
+  k: ["объём и стоимость", "вся история в Hive", "в Greenplum только свежее", "площадка для расчётов"],
+  mc: { ok: "Дешёвое хранение полной истории и тяжёлые расчёты", no: ["Greenplum не умеет хранить операции", "Hadoop быстрее для отчётов BI"] },
+  w: ["Parquet"] },
+
+{ id: "u10-5", u: 10, l: 2, q: "Что такое слои STG, DDS и MART?",
+  a: "STG — копия источника один к одному плюс технические поля: идентификатор загрузки, время, система-источник. DDS — интегрированный детальный слой: данные разных систем сведены в единую модель с бизнес-ключами и историей. MART — денормализованные витрины под конкретного потребителя.",
+  m: "STG нужен, чтобы при ошибке в DDS пересчитать без повторного похода в источник и видеть, что именно пришло.",
+  k: ["STG — как в источнике", "DDS — единая модель и история", "MART — под потребителя", "зачем STG"],
+  mc: { q: "Зачем STG, если можно грузить сразу в DDS?", ok: "Пересчитать без повторного похода в источник и видеть, что пришло", no: ["Так быстрее загрузка", "В DDS нельзя писать напрямую"] },
+  w: ["STG", "DDS"] },
+
+{ id: "u10-6", u: 10, l: 2, q: "Как сводили клиентов из разных систем?",
+  a: "Один клиент имел три идентификатора: в АБС, в CRM и номер карты в процессинге. Таблица мэппинга сводила их к суррогатному ключу DWH `client_sk`, и все факты ссылались на него. Правила склейки — ИНН, паспорт и дата рождения, смена паспорта — утверждали архитектор и аналитики, таблицу вёл коллега.",
+  m: "Моя часть — чтобы карточные данные находили своего клиента. Долю операций с «неизвестным клиентом» мониторили, рост — повод остановить публикацию.",
+  k: ["три идентификатора", "мэппинг к client_sk", "правила утверждали архитектор и аналитики", "доля неизвестных клиентов"],
+  mc: { q: "Что такое client_sk?", ok: "Суррогатный ключ клиента в DWH", no: ["Номер клиента в АБС", "Номер карты"] },
+  w: ["client_sk"] },
+
+{ id: "u10-7", u: 10, l: 2, q: "Что такое SCD2 и зачем он нужен?",
+  a: "При изменении атрибута старая строка закрывается, а новая открывается, у каждой версии период действия `valid_from` и `valid_to` и флаг текущей. Это нужно, чтобы отчёты прошлых периодов не перекрашивались: выручка премиальных клиентов за февраль должна считать клиента массовым, если в феврале он им был.",
+  m: "Факты джойнятся с историей «на дату операции»: дата операции между valid_from и valid_to.",
+  k: ["закрыть старую, открыть новую", "valid_from, valid_to, is_current", "отчёты не перекрашиваются", "джойн на дату"],
+  c: `JOIN dds.client_hist c
+  ON c.client_sk = t.client_sk
+ AND t.operation_date BETWEEN c.valid_from AND c.valid_to`,
+  mc: { q: "Что будет без SCD2?", ok: "Прошлые отчёты пересчитаются по текущим атрибутам", no: ["Перестанут загружаться данные", "Удвоятся суммы"] },
+  w: ["перекрашивались", "valid_to"] },
+
+{ id: "u10-8", u: 10, l: 3, q: "Как вы реализовывали SCD2 в Greenplum без MERGE?",
+  a: "В три шага в одной транзакции. Считали хэш отслеживаемых атрибутов. `UPDATE` закрывал текущие версии с изменившимся хэшем: `valid_to` и `is_current = false`. `INSERT` добавлял новые версии — и для изменившихся, и для новых ключей. Для больших таблиц пересобирали затронутую партицию и подменяли через `EXCHANGE PARTITION`: массовый UPDATE дорогой и раздувает таблицу.",
+  m: "Я реализовывала историю карточных договоров, тот же подход, что у коллеги для клиентов.",
+  k: ["хэш атрибутов", "UPDATE закрывает", "INSERT новых", "одна транзакция", "EXCHANGE PARTITION"],
+  c: `UPDATE dds.client_hist t
+SET valid_to = s.eff_date - 1, is_current = false
+FROM src s
+WHERE t.client_sk = s.client_sk AND t.is_current AND t.hash_diff <> s.hash_diff;
+
+INSERT INTO dds.client_hist (client_sk, segment, city, hash_diff, valid_from, valid_to, is_current)
+SELECT s.client_sk, s.segment, s.city, s.hash_diff, s.eff_date, '9999-12-31', true
+FROM src s
+LEFT JOIN dds.client_hist t ON t.client_sk = s.client_sk AND t.is_current
+WHERE t.client_sk IS NULL;`,
+  f: { q: "Как проверить, что история не сломалась?", a: "Ровно одна текущая версия на ключ и нет пересечений интервалов — проверка через lag(valid_to)." },
+  o: ["Посчитать хэш атрибутов", "Закрыть изменившиеся версии", "Вставить новые версии", "Проверить одну текущую версию на ключ"],
+  mc: { q: "Чем опасно пересечение интервалов SCD2?", ok: "Джойн на дату найдёт две версии и удвоит суммы", no: ["Запрос упадёт с ошибкой", "Замедлится чтение"] },
+  w: ["EXCHANGE PARTITION", "хэш"] },
+
+{ id: "u10-9", u: 10, l: 3, q: "Как обрабатывали проводки задним числом и удаления в источнике?",
+  a: "Бухгалтерия могла исправить операцию за прошлую дату, поэтому проводки перегружались не за вчера, а окном в ⟨post_win⟩ — партиция перезаписывалась целиком. Физические удаления инкрементом по `updated_at` не видны: их ловили периодической полной сверкой ключей с источником, а надёжный вариант — CDC.",
+  m: "Изменения после закрытия окна закрывались ручным backfill за период.",
+  k: ["окно ⟨post_win⟩", "перезапись партиции", "удаления — сверка ключей или CDC", "backfill для старых правок"],
+  mc: { q: "Почему проводки грузили окном, а не за вчера?", ok: "Бухгалтерия исправляет операции задним числом", no: ["Так быстрее загрузка", "АБС отдаёт данные с задержкой в 10 дней"] },
+  w: ["прошлую дату"] },
+
+{ id: "u10-10", u: 10, l: 2, q: "Как проходила ночная загрузка?",
+  a: "В 00:30 Spark выгружал процессинг в Hive, в 01:00 PXF забирал изменения CRM. После закрытия операционного дня сенсор пускал загрузку АБС. Затем свежие дни из Hive уходили в STG. В 02:00 DDS склеивал три системы, в 03:00 строились витрины, в 03:30 — проверки и сверки, к 04:00 публикация, и утром аналитики видели вчерашний день.",
+  m: "Каждая загрузка писала строку в мета-таблицу загрузок: период, статус, число строк, сумма. Ночью загрузки смотрела группа сопровождения по нашим инструкциям.",
+  k: ["процессинг и CRM параллельно", "АБС после опердня", "DDS ждёт все три STG", "витрины, проверки, публикация", "мета-таблица загрузок"],
+  o: ["Spark: процессинг в Hive", "PXF: CRM в stg_crm", "АБС после закрытия опердня", "Hive в stg_card", "DDS", "MART", "DQ и сверки", "Публикация"],
+  mc: { q: "Почему АБС нельзя грузить до закрытия опердня?", ok: "Проводки дня ещё меняются", no: ["АБС недоступна ночью", "Так требует Greenplum"] },
+  w: ["операционного дня"] },
+
+{ id: "u11-1", u: 11, l: 2, q: "Как устроен Greenplum и что такое ключ распределения?",
+  a: "Это мастер и ⟨segs⟩ сегментов — отдельных экземпляров PostgreSQL. Каждая строка таблицы лежит на одном сегменте, выбранном по хэшу ключа `DISTRIBUTED BY`. Запрос выполняется на всех сегментах параллельно. Если две таблицы распределены по одному ключу одного типа и джойнятся по нему, джойн идёт локально без пересылки данных.",
+  m: "Иначе строки пересылаются между сегментами или маленькая таблица копируется на все — в плане это Motion.",
+  k: ["мастер и сегменты", "DISTRIBUTED BY", "параллельно на сегментах", "colocated join"],
+  mc: { q: "Когда джойн идёт без пересылки данных?", ok: "Обе таблицы распределены по ключу джойна одного типа", no: ["Обе таблицы партиционированы по дате", "Одна из таблиц маленькая"] },
+  w: ["DISTRIBUTED BY"] },
+
+{ id: "u11-2", u: 11, l: 3, q: "Как выбирали ключ распределения?",
+  a: "По ключу самых частых тяжёлых джойнов, с проверкой перекоса и одинаковых типов. Проводки распределили по счёту, чтобы джойн со счетами был локальным. Но технический транзитный счёт давал ⟨segs⟩-й части нагрузки непропорционально много — на одном сегменте оказалось около 30% строк. Сделали составной ключ. Это компромисс между равномерностью и локальностью джойнов.",
+  m: "Ключ большой таблицы согласовывали с DBA и архитектором: переделка затрагивает соседние команды.",
+  k: ["ключ частых тяжёлых джойнов", "проверка перекоса", "одинаковые типы", "составной ключ", "согласование с DBA"],
+  c: `SELECT gp_segment_id, count(*)
+FROM dds.transactions GROUP BY 1 ORDER BY 2 DESC;`,
+  mc: { q: "Что опасно при выборе ключа распределения?", ok: "Тяжёлое значение ключа перегрузит один сегмент", no: ["Слишком много партиций", "Таблица станет колоночной"] },
+  w: ["перекоса"] },
+
+{ id: "u11-3", u: 11, l: 3, q: "Чем Redistribute Motion отличается от Broadcast Motion?",
+  a: "Redistribute Motion пересылает строки между сегментами по новому ключу — на большой таблице это главный тормоз. Broadcast Motion копирует таблицу на все сегменты: для маленького справочника нормально, для большой таблицы — катастрофа и обычно признак устаревшей статистики. Gather Motion собирает результат на мастер.",
+  m: "В плане ещё смотрят отсечение партиций и расхождение оценки строк с фактом.",
+  k: ["Redistribute — пересылка по ключу", "Broadcast — копия на все сегменты", "broadcast большой таблицы — статистика", "Gather — на мастер"],
+  mc: { q: "Broadcast Motion большой таблицы обычно значит…", ok: "Устаревшую статистику", no: ["Правильный ключ распределения", "Работу отсечения партиций"] },
+  w: ["Broadcast Motion"] },
+
+{ id: "u11-4", u: 11, l: 3, q: "Расскажите про оптимизацию витрины в Greenplum.",
+  a: "Витрина оборотов по филиалам шла 40 минут. В плане — Redistribute Motion транзакций по счёту и Broadcast огромной таблицы договоров. Перераспределили транзакции по `account_id` и выровняли тип ключа — `numeric` в одной таблице и `varchar` в другой ломали локальный джойн. Добавили `ANALYZE` после загрузки в DAG и переписали фильтр под отсечение партиций. Время ⟨gp_fix⟩.",
+  m: "Перераспределение большой таблицы предложила и проверила на копии, согласовала с DBA и архитектором.",
+  k: ["симптом в плане", "перераспределение по account_id", "одинаковый тип ключа", "ANALYZE после загрузки", "фильтр под партиции", "⟨gp_fix⟩"],
+  mc: { q: "Почему одинаковые по смыслу ключи не дали локальный джойн?", ok: "Разные типы: numeric и varchar", no: ["Таблицы в разных схемах", "Не хватило памяти"] },
+  w: ["ANALYZE", "account_id"] },
+
+{ id: "u11-5", u: 11, l: 2, q: "Почему не работало отсечение партиций?",
+  a: "Фильтр был через функцию над колонкой партиционирования: `date_trunc('month', operation_date) = ...`. Оптимизатор не может по нему понять, какие партиции нужны, и читает все. Переписали на диапазон прямо по колонке: `operation_date >= '2026-09-01' AND operation_date < '2026-10-01'`.",
+  m: "Другие причины — несовпадение типов в условии и отсутствие статистики. В плане видно конкретную партицию, если отсечение сработало.",
+  k: ["функция над колонкой ломает отсечение", "фильтр диапазоном", "типы и статистика", "проверка по плану"],
+  mc: { ok: "Функция над колонкой партиционирования в фильтре", no: ["Слишком мало партиций", "Таблица распределена случайно"] },
+  w: ["отсечение"] },
+
+{ id: "u11-6", u: 11, l: 2, q: "Зачем ANALYZE и что будет без него?",
+  a: "ANALYZE обновляет статистику таблицы: сколько строк, как распределены значения. Оптимизатор по ней выбирает план. Без свежей статистики он может решить, что в огромной таблице тысяча строк, и выбрать Broadcast Motion. Поэтому `ANALYZE` затронутых партиций был шагом DAG сразу после загрузки.",
+  m: "Регламенты VACUUM и общий ANALYZE вели DBA, а ANALYZE после своих загрузок — моя часть.",
+  k: ["статистика для оптимизатора", "неверная оценка → плохой план", "ANALYZE после загрузки в DAG"],
+  mc: { ok: "Оптимизатор выберет план по неверной оценке строк", no: ["Таблица перестанет читаться", "Данные перестанут сжиматься"] },
+  w: ["ANALYZE"] },
+
+{ id: "u11-7", u: 11, l: 2, q: "Как работал PXF?",
+  a: "PXF — механизм внешних таблиц Greenplum. Объявляешь внешнюю таблицу с адресом источника — Oracle, MS SQL, Hive — и при `SELECT` Greenplum сам читает данные, параллельно со всех сегментов. Загрузка в STG — обычный `INSERT ... SELECT` из внешней таблицы, Airflow только запускает SQL.",
+  m: "Серверы PXF к источникам настраивали DBA, внешние таблицы доменов — я. Для параллельного чтения из Oracle указывали PARTITION_BY.",
+  k: ["внешние таблицы", "чтение параллельно с сегментов", "INSERT SELECT в STG", "серверы — DBA, таблицы — я"],
+  c: `INSERT INTO stg_crm.clients
+SELECT c.*, :load_id, now(), 'CRM'
+FROM ext_crm.clients c
+WHERE c.updated_at > :last_watermark - interval '1 hour';`,
+  mc: { q: "Кто читает данные из источника при загрузке через PXF?", ok: "Сам Greenplum при SELECT из внешней таблицы", no: ["Airflow скачивает и вставляет", "Spark-джоба"] },
+  w: ["PXF"] },
+
+{ id: "u11-8", u: 11, l: 3, q: "Как писали Spark-джобы в Hadoop и как обеспечивали идемпотентность?",
+  a: "Две джобы: ежедневная выгрузка процессинга — Spark читал реплику PostgreSQL по JDBC параллельно и писал партицию дня в Hive в Parquet; ежемесячный расчёт признаков по 12 месяцам. Идемпотентность — `insertInto` с динамической перезаписью партиций: перезаписывается только своя партиция, повтор и backfill безопасны.",
+  m: "Типовые проблемы: отставание реплики — сенсор проверял полноту дня; мелкие файлы — coalesce перед записью; файлы мимо Hive — MSCK REPAIR или запись только через insertInto.",
+  k: ["выгрузка по JDBC в Hive", "признаки по 12 месяцам", "dynamic partition overwrite", "сенсор полноты, coalesce"],
+  c: `spark.conf.set("spark.sql.sources.partitionOverwriteMode", "dynamic")
+df.write.mode("overwrite").insertInto("dl.card_transactions")`,
+  mc: { q: "Что даёт partitionOverwriteMode=dynamic?", ok: "Перезаписывается только партиция из данных, а не вся таблица", no: ["Ускоряет чтение", "Удаляет дубли"] },
+  w: ["insertInto"] },
+
+{ id: "u11-9", u: 11, l: 2, q: "Как сверяли витрину с бухгалтерией?",
+  a: "Сумма остатков в витрине продуктов на отчётную дату сверялась с оборотно-сальдовой ведомостью АБС по балансовым счетам, допуск — ноль. При расхождении, например ⟨osv⟩: находили балансовый счёт с разницей, внутри — конкретные договоры, проверяли типичные причины: проводки задним числом, договор без клиента в мэппинге, авторизация без финального списания.",
+  m: "Если причина в загрузке — исправляла и пересчитывала. Если в правиле — к аналитику. Если в АБС — к домену «Счета» и владельцу системы.",
+  k: ["ОСВ по балансовым счетам", "допуск ноль", "разбор до договора", "типичные причины", "кто исправляет"],
+  o: ["Сравнить суммы по балансовым счетам", "Найти счёт с расхождением", "Найти договоры внутри счёта", "Проверить типичные причины", "Исправить и пересчитать"],
+  mc: { q: "С чем сверяли витрину продуктов?", ok: "С оборотно-сальдовой ведомостью АБС", no: ["С витриной в ClickHouse", "С отчётом аналитиков"] },
+  w: ["оборотно-сальдовой"] },
+
+{ id: "u11-10", u: 11, l: 3, q: "Какие проверки качества были в банковском DWH?",
+  a: "Полнота загрузки — количество и сумма в STG против источника. Уникальность бизнес-ключей в DDS. Корректность SCD2 — ровно одна текущая версия на ключ и нет пересечений интервалов. Согласованность слоёв — количество и суммы не теряются от STG до MART. Сверка с ОСВ. Проверка готовности источника — флаг закрытия опердня.",
+  m: "Количество сравнивали вместе с суммой: количество совпадёт, если одна строка потерялась, а другая задвоилась. Общие правила DQ и пороги задавал data governance.",
+  k: ["полнота: count и sum", "уникальность ключей", "SCD2 без пересечений", "согласованность слоёв", "ОСВ"],
+  c: `SELECT contract_sk FROM (
+  SELECT contract_sk, valid_from,
+         lag(valid_to) OVER (PARTITION BY contract_sk ORDER BY valid_from) AS prev_to
+  FROM dds.card_contract_hist) x
+WHERE valid_from <= prev_to;`,
+  mc: { q: "Почему сравнивали и количество, и сумму?", ok: "Количество совпадёт, если одна строка потерялась, а другая задвоилась", no: ["Так требует регулятор", "Сумма считается быстрее"] },
+  w: ["согласованность"] },
+
+{ id: "u12-1", u: 12, l: 1, q: "Что было самым сложным в проекте?",
+  a: "Корректность данных при несовершенных источниках: дубли, поздние события, смена схемы без предупреждения. Код написать несложно — сложно сделать так, чтобы цифры сходились с источником, а любой перезапуск и пересчёт были безопасны. Поэтому столько внимания идемпотентности, карантину, проверкам качества и сверкам.",
+  m: "Второе сложное — договорённости с другими командами: контракт схемы с бэкендом появился только после инцидента.",
+  k: ["корректность при плохих источниках", "идемпотентность и пересчёты", "карантин, DQ, сверки", "договорённости с командами"],
+  t: "Назови реальную трудность и что ты из неё вынесла — без жалоб на коллег.",
+  mc: { ok: "Сделать цифры надёжными при несовершенных источниках", no: ["Выучить синтаксис Spark", "Настроить Kubernetes"] },
+  w: ["идемпотентности"] },
+
+{ id: "u12-2", u: 12, l: 2, q: "Что бы вы улучшили в архитектуре?",
+  a: "Сравнение статусов по версии заказа из источника вместо event_ts. Обязательный контракт схем с проверкой в CI продюсеров с первого дня, а не после инцидента. Интеграционные тесты в CI и режим пробного прогона для разовых операций. Write-audit-publish для публикации факта: проверки на ветке таблицы до того, как данные увидят потребители.",
+  m: "Показывает, что ты видишь слабые места системы, в которой работала.",
+  k: ["версия из источника", "контракт схем с начала", "интеграционные тесты и dry-run", "write-audit-publish"],
+  mc: { ok: "Сравнивать статусы по версии заказа из источника", no: ["Убрать проверки качества ради скорости", "Перенести всё в один ClickHouse"] },
+  w: ["write-audit-publish"] },
+
+{ id: "u12-3", u: 12, l: 2, q: "Чем Greenplum отличается от ClickHouse и когда что выбирать?",
+  a: "Greenplum — MPP на PostgreSQL: сильный SQL, сложные джойны многих таблиц, транзакции, UPDATE и DELETE — подходит для корпоративного хранилища с моделью данных. ClickHouse — колоночная СУБД для очень быстрых агрегатов по большим таблицам событий, джойны и обновления слабее — подходит для дашбордов и витрин.",
+  m: "У меня это видно по проектам: банковский DWH с SCD2 и сверками — Greenplum, оперативные витрины e-com — ClickHouse.",
+  k: ["Greenplum — джойны, модель, транзакции", "ClickHouse — быстрые агрегаты", "примеры из двух проектов"],
+  mc: { q: "Что лучше подходит для SCD2 и сложных джойнов модели?", ok: "Greenplum", no: ["ClickHouse", "Kafka"] },
+  w: ["MPP"] },
+
+{ id: "u12-4", u: 12, l: 1, q: "Почему вы ищете новую работу и почему к нам?",
+  a: "Структура ответа: что хочешь развивать дальше, почему это есть у этой компании, и одна конкретика про их стек или задачи. Например: хочу больше стриминга и продуктовых данных, а у вас данные напрямую влияют на операционку и есть Kafka, Spark и Greenplum с dbt — это продолжение моего опыта.",
+  m: "Говори свои реальные причины. Не ругай прошлого работодателя.",
+  k: ["что хочешь развивать", "почему эта компания", "конкретика про их стек", "без негатива о прошлом"],
+  t: "Это не проверка знаний, а проверка мотивации — готовь свой собственный ответ.",
+  mc: { q: "Чего избегать в этом ответе?", ok: "Критики прошлого работодателя", no: ["Упоминания стека компании", "Своих целей развития"] },
+  w: ["развивать"] },
+
+{ id: "u12-5", u: 12, l: 1, q: "Какие вопросы вы зададите нам?",
+  a: "Вопросы, которые показывают понимание: как устроена граница между платформой и доменными командами; где хранится озеро и чем его читают; как продуктовые сервисы гарантируют, что событие не потеряется при публикации; есть ли дежурства и как часто; какая доля поддержки против новой разработки; как выглядят проверки качества перед публикацией витрин.",
+  m: "Один-два вопроса про команду и ожидания на первые три месяца тоже уместны.",
+  k: ["граница платформа/домен", "озеро и движки", "надёжность публикации событий", "дежурства", "поддержка против разработки"],
+  mc: { ok: "Как сервисы гарантируют, что событие не потеряется при публикации?", no: ["Сколько у вас выходных", "Можно ли не писать тесты"] },
+  w: ["дежурства"] },
+
+{ id: "u12-6", u: 12, l: 2, q: "Какой у вас опыт с dbt?",
+  a: "Отвечай честно. Если в проектах dbt не было: трансформации у нас были в Spark и SQL, запускаемых Airflow; концепции dbt я знаю — модели с `ref`, инкрементальные модели, снапшоты как SCD2, тесты и документация lineage — и собрала pet-проект на PostgreSQL. Если был — назови адаптер, стратегию инкремента и как делали backfill.",
+  m: "Связь с опытом: incremental в dbt — то же, что наш MERGE по окну; snapshot — то же, что SCD2.",
+  k: ["честно про уровень", "что использовали вместо", "ref, incremental, snapshot, тесты", "pet-проект"],
+  t: "Не вписывай dbt в опыт, если его не было, — спросят про адаптер и стратегию инкремента.",
+  mc: { q: "Что в dbt соответствует SCD2?", ok: "snapshot", no: ["seed", "macro"] },
+  w: ["snapshot", "ref"] },
+
+{ id: "u12-7", u: 12, l: 1, q: "Как вы объясняете бизнесу задержку данных или ошибку в цифрах?",
+  a: "Сразу и без технических деталей: что затронуто, за какой период, насколько цифры неточны и когда будут исправлены. В инциденте со схемой я написала аналитикам в канал ещё вечером, что оплаты за вечер занижены и будут пересчитаны к утру, а утром подтвердила, что всё пересчитано и сверка сошлась.",
+  m: "Главное — потребитель узнаёт от тебя раньше, чем сам заметит расхождение.",
+  k: ["что, за какой период, насколько", "когда исправим", "без жаргона", "сообщить раньше, чем заметят"],
+  mc: { ok: "Что затронуто, за какой период и когда исправим", no: ["Подробно про offsets и checkpoint", "Ничего не говорить до исправления"] },
+  w: ["пересчитаны"] }
+);
+
+</script>
+<script>
+(() => {
+  "use strict";
+
+  const UNITS = window.UNITS;
+  const QS = window.Q;
+  const FIELDS = window.PROFILE_FIELDS;
+  const KEY = "interview-trainer-v1";
+  const DAY = 864e5;
+  const INTERVALS = [0, 1, 2, 4, 7, 14]; // дни до повтора для коробок 0–5
+  const GOAL = 50;                       // цель опыта на день
+  const app = document.getElementById("app");
+
+  // ---------- состояние ----------
+  function load() {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { return {}; }
+  }
+  const S = Object.assign({ xp: 0, streak: 0, last: null, day: null, dayXp: 0, cards: {}, profile: {}, tipHidden: false }, load());
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) { /* хранилище недоступно — работаем в памяти */ }
+  }
+
+  function localDay(d) {
+    const x = d || new Date();
+    return new Date(x.getTime() - x.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  }
+  const yesterday = () => localDay(new Date(Date.now() - DAY));
+
+  function addXp(n) {
+    const t = localDay();
+    if (S.day !== t) { S.day = t; S.dayXp = 0; }
+    if (S.last !== t) { S.streak = S.last === yesterday() ? S.streak + 1 : 1; S.last = t; }
+    S.xp += n; S.dayXp += n;
+    save();
+  }
+
+  const getC = (id) => S.cards[id] || { box: 0, due: 0, seen: false };
+  function grade(id, result) {
+    const c = S.cards[id] || (S.cards[id] = { box: 0, due: 0, seen: false, ok: 0, bad: 0 });
+    c.seen = true;
+    if (result === "good") { c.box = Math.min(5, c.box + 1); c.ok = (c.ok || 0) + 1; }
+    else if (result === "ok") { c.box = Math.max(1, c.box); }
+    else { c.box = 0; c.bad = (c.bad || 0) + 1; }
+    c.due = Date.now() + INTERVALS[c.box] * DAY;
+    save();
+  }
+  const mastered = (id) => getC(id).box >= 3;
+  const isWeak = (id) => { const c = S.cards[id]; return !!c && c.seen && (c.box === 0 || c.due <= Date.now()); };
+
+  // ---------- текст ----------
+  const esc = (s) => String(s).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+  function pval(k) {
+    const f = FIELDS.find((x) => x.key === k);
+    const v = S.profile[k];
+    return (v !== undefined && String(v).trim() !== "") ? v : (f ? f.def : k);
+  }
+  function rich(text) {
+    let h = esc(text);
+    h = h.replace(/`([^`]+)`/g, (m, c) => "<code>" + c + "</code>");
+    h = h.replace(/⟨([a-z_]+)⟩/g, (m, k) => '<mark class="ph" title="Из профиля — можно поменять">' + esc(pval(k)) + "</mark>");
+    h = h.replace(/⟪BLANK⟫/g, '<span class="blank">?</span>');
+    return h;
+  }
+  const plain = (text) => String(text).replace(/⟨([a-z_]+)⟩/g, (m, k) => pval(k)).replace(/`/g, "");
+  function shuffle(a) {
+    const r = a.slice();
+    for (let i = r.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [r[i], r[j]] = [r[j], r[i]]; }
+    return r;
+  }
+
+  // ---------- каркас экрана ----------
+  let sheetEl = null;
+  function clearSheet() { if (sheetEl) { sheetEl.remove(); sheetEl = null; } }
+  function view(html) { clearSheet(); app.innerHTML = html; window.scrollTo(0, 0); }
+  function sheet(cls, inner, buttons) {
+    clearSheet();
+    sheetEl = document.createElement("div");
+    sheetEl.className = "sheet " + (cls || "");
+    sheetEl.innerHTML = '<div class="in" aria-live="polite">' + inner + buttons + "</div>";
+    document.body.appendChild(sheetEl);
+  }
+  function setCheck(enabled) {
+    const b = sheetEl && sheetEl.querySelector('[data-act="check"]');
+    if (b) b.disabled = !enabled;
+  }
+
+  function topbar() {
+    const t = localDay();
+    const dx = S.day === t ? S.dayXp : 0;
+    const st = (S.last === t || S.last === yesterday()) ? S.streak : 0;
+    const m = QS.filter((q) => mastered(q.id)).length;
+    return '<div class="top"><span class="stat" title="Дней подряд">🔥 ' + st + '</span><span class="stat" title="Опыт">⭐ ' + S.xp +
+      '</span><div class="goal" title="Цель дня: ' + GOAL + ' опыта"><i style="width:' + Math.min(100, dx / GOAL * 100) + '%"></i></div>' +
+      '<span class="stat" title="Освоено вопросов">🎯 ' + m + "/" + QS.length + "</span></div>";
+  }
+
+  function unitProgress(u) {
+    const qs = QS.filter((q) => q.u === u.id);
+    return { qs, m: qs.filter((q) => mastered(q.id)).length, seen: qs.filter((q) => getC(q.id).seen).length };
+  }
+
+  // ---------- главная ----------
+  function home() {
+    const weak = QS.filter((q) => isWeak(q.id)).length;
+    let rec = UNITS.find((u) => { const p = unitProgress(u); return p.seen < p.qs.length; });
+    if (!rec) rec = UNITS.reduce((a, u) => { const pa = unitProgress(a), pu = unitProgress(u); return pu.m / pu.qs.length < pa.m / pa.qs.length ? u : a; });
+    const tip = S.tipHidden ? "" :
+      '<div class="tip">Числа и названия, выделенные <mark class="ph">так</mark>, подставляются из профиля. Сейчас там значения из модели проекта — поменяй их на свои реальные, чтобы репетировать свою историю.<br>' +
+      '<button data-go="profile">Открыть профиль</button><button data-act="hideTip">Понятно</button></div>';
+    const units = UNITS.map((u) => {
+      const p = unitProgress(u);
+      const isRec = u === rec;
+      return '<button class="unit' + (isRec ? " rec" : "") + '" data-unit="' + u.id + '"><span class="ic">' + u.icon + "</span><span>" +
+        '<span class="t">' + u.id + ". " + esc(u.title) + '</span><span class="tag">' + esc(u.project) + "</span>" +
+        '<div class="p">' + p.m + " из " + p.qs.length + " освоено" + (isRec ? " · дальше сюда" : "") + "</div>" +
+        '<div class="bar"><i style="width:' + (p.m / p.qs.length * 100) + '%"></i></div></span></button>';
+    }).join("");
+    view('<div class="wrap">' + topbar() +
+      "<h1>Собеседование: мой опыт</h1>" +
+      '<p class="sub">100 вопросов о двух проектах. Отвечай вслух — так ответ запоминается быстрее.</p>' + tip +
+      '<div class="actions">' +
+      '<button class="tile" data-go="review"><b>🔁 Слабые места</b><span>' + (weak ? weak + " на повторение" : "пока нет") + "</span></button>" +
+      '<button class="tile" data-go="interview"><b>🎙️ Собеседование</b><span>10 вопросов с таймером</span></button>' +
+      '<button class="tile" data-go="cheat"><b>📄 Шпаргалка</b><span>все короткие ответы</span></button>' +
+      '<button class="tile" data-go="profile"><b>⚙️ Профиль</b><span>твои числа и названия</span></button>' +
+      "</div><h2>Разделы</h2><div class=\"path\">" + units + "</div></div>");
+  }
+
+  // ---------- уроки ----------
+  let L = null;
+  const cur = () => L.steps[L.i];
+
+  function clozeData(q) {
+    if (!q.w) return null;
+    for (const t of shuffle(q.w)) {
+      for (const src of [q.a, q.m || ""]) {
+        const i = src.toLowerCase().indexOf(t.toLowerCase());
+        if (i >= 0) return { term: src.substr(i, t.length), text: src.slice(0, i) + "⟪BLANK⟫" + src.slice(i + t.length) };
+      }
+    }
+    return null;
+  }
+  function distractors(q, term, n) {
+    const low = term.toLowerCase();
+    const same = [...new Set(QS.filter((x) => x.u === q.u && x.id !== q.id).flatMap((x) => x.w || []))].filter((x) => x.toLowerCase() !== low);
+    let res = shuffle(same).slice(0, n);
+    if (res.length < n) {
+      const all = [...new Set(QS.flatMap((x) => x.w || []))].filter((x) => x.toLowerCase() !== low && !res.includes(x));
+      res = res.concat(shuffle(all).slice(0, n - res.length));
+    }
+    return res;
+  }
+  function practiceFor(q) {
+    const out = [];
+    if (q.mc) out.push({ type: "mcq", q });
+    if (q.w) out.push({ type: "cloze", q });
+    if (q.o) out.push({ type: "order", q });
+    if (q.f) out.push({ type: "follow", q });
+    return out;
+  }
+  function pickQs(pool, n) {
+    const unseen = pool.filter((q) => !getC(q.id).seen);
+    const seen = pool.filter((q) => getC(q.id).seen).sort((a, b) => (getC(a.id).due - getC(b.id).due) || (getC(a.id).box - getC(b.id).box));
+    return unseen.concat(seen).slice(0, n);
+  }
+  function startUnit(uid) {
+    const u = UNITS.find((x) => x.id === uid);
+    const qs = pickQs(QS.filter((q) => q.u === uid), 5);
+    const practice = shuffle(qs.flatMap(practiceFor)).slice(0, 9);
+    const steps = qs.map((q) => ({ type: "flash", q })).concat(practice);
+    steps.splice(Math.min(steps.length, qs.length + 2), 0, { type: "pairs", unit: u });
+    begin(steps, u.icon + " " + u.title, uid);
+  }
+  function startReview() {
+    let weak = QS.filter((q) => isWeak(q.id));
+    if (!weak.length) weak = QS.filter((q) => getC(q.id).seen).sort((a, b) => getC(a.id).box - getC(b.id).box).slice(0, 6);
+    if (!weak.length) {
+      view('<div class="wrap"><button class="back" data-go="home">← Назад</button><h1>Пока нечего повторять</h1><p class="sub">Пройди пару уроков — сюда попадут вопросы, на которых ты ошиблась или которые пора повторить.</p></div>');
+      return;
+    }
+    weak = shuffle(weak).slice(0, 6);
+    const steps = shuffle(weak.flatMap((q) => {
+      const p = practiceFor(q).filter((s) => s.type !== "follow");
+      return p.length ? shuffle(p).slice(0, 2) : [{ type: "flash", q }];
+    }));
+    begin(steps, "🔁 Слабые места", null);
+  }
+  function begin(steps, title, unit) {
+    L = { steps, i: 0, correct: 0, graded: 0, xp: 0, title, unit, gradedIds: new Set() };
+    step();
+  }
+  function step() {
+    if (L.i >= L.steps.length) { finish(); return; }
+    const s = cur();
+    const head = '<div class="wrap"><div class="lessonbar"><button class="x" data-act="quit" aria-label="Выйти">×</button>' +
+      '<div class="prog"><i style="width:' + (L.i / L.steps.length * 100) + '%"></i></div></div>';
+    ({ flash: rFlash, mcq: rMcq, cloze: rCloze, order: rOrder, pairs: rPairs, follow: rFollow })[s.type](s, head);
+  }
+  function give(n) { L.xp += n; addXp(n); }
+  function lessonGrade(q, ok) {
+    if (!ok) grade(q.id, "bad");
+    else if (!L.gradedIds.has(q.id)) grade(q.id, "good");
+    L.gradedIds.add(q.id);
+  }
+  function result(ok, expHtml) {
+    L.graded++; if (ok) L.correct++;
+    give(ok ? 10 : 2);
+    sheet(ok ? "good" : "bad", '<p class="msg">' + (ok ? "Верно!" : "Не совсем") + '</p><div class="exp">' + expHtml + "</div>",
+      '<button class="btn' + (ok ? "" : " red") + '" data-act="next">Дальше</button>');
+  }
+
+  function answerBlock(q) {
+    let more = "";
+    if (q.m || q.c || q.t) {
+      more = "<details><summary>Подробнее</summary>" + (q.m ? "<p>" + rich(q.m) + "</p>" : "") +
+        (q.c ? "<pre><code>" + esc(q.c) + "</code></pre>" : "") + (q.t ? '<div class="trap">⚠️ ' + rich(q.t) + "</div>" : "") + "</details>";
+    }
+    return '<div class="answer">' + rich(q.a) + '<ul class="keys">' + q.k.map((k) => "<li>" + rich(k) + "</li>").join("") + "</ul>" + more + "</div>";
+  }
+
+  // Карточка: отвечаешь вслух и оцениваешь себя
+  function rFlash(s, head) {
+    view(head + '<p class="kind">Ответь вслух</p><p class="qtext">' + rich(s.q.q) + '</p><p class="hint">Проговори ответ за 30 секунд, потом проверь себя.</p><div id="ans"></div></div>');
+    sheet("", "", '<button class="btn" data-act="reveal">Показать ответ</button>');
+  }
+  function revealFlash() {
+    document.getElementById("ans").innerHTML = answerBlock(cur().q);
+    sheet("", '<p class="hint" style="margin:0 0 10px">Насколько близко ты ответила?</p>',
+      '<div class="row"><button class="btn red" data-rate="bad">Не знаю</button><button class="btn amber" data-rate="ok">Почти</button><button class="btn" data-rate="good">Знаю</button></div>');
+  }
+  function rate(r) {
+    const q = cur().q;
+    grade(q.id, r); L.gradedIds.add(q.id);
+    give(r === "good" ? 10 : r === "ok" ? 6 : 2);
+    next();
+  }
+
+  // Выбор из трёх
+  function rMcq(s, head) {
+    s.opts = shuffle([s.q.mc.ok].concat(s.q.mc.no)); s.sel = null;
+    view(head + '<p class="kind">Выбери верный ответ</p><p class="qtext">' + rich(s.q.mc.q || s.q.q) + '</p><div class="opts">' +
+      s.opts.map((o, i) => '<button class="opt" data-opt="' + i + '">' + rich(o) + "</button>").join("") + "</div></div>");
+    sheet("", "", '<button class="btn" data-act="check" disabled>Проверить</button>');
+  }
+  // Пропуск в тексте
+  function rCloze(s, head) {
+    const cd = clozeData(s.q);
+    s.term = cd.term; s.opts = shuffle([cd.term].concat(distractors(s.q, cd.term, 2))); s.sel = null;
+    view(head + '<p class="kind">Вставь пропущенное</p><p class="hint">' + rich(s.q.q) + '</p><div class="answer cloze">' + rich(cd.text) +
+      '</div><div class="opts">' + s.opts.map((o, i) => '<button class="opt" data-opt="' + i + '">' + esc(o) + "</button>").join("") + "</div></div>");
+    sheet("", "", '<button class="btn" data-act="check" disabled>Проверить</button>');
+  }
+  function pickOpt(i, el) {
+    const s = cur();
+    if (s.checked) return;
+    s.sel = i;
+    app.querySelectorAll(".opt").forEach((b) => b.classList.remove("sel"));
+    el.classList.add("sel");
+    setCheck(true);
+  }
+
+  // Порядок шагов
+  function rOrder(s, head) {
+    s.pool = shuffle(s.q.o.map((t, i) => ({ t, i }))); s.picked = [];
+    view(head + '<p class="kind">Расставь по порядку</p><p class="qtext">' + rich(s.q.q) + '</p><div id="ord"></div></div>');
+    sheet("", "", '<button class="btn" data-act="check" disabled>Проверить</button>');
+    drawOrder();
+  }
+  function drawOrder() {
+    const s = cur();
+    document.getElementById("ord").innerHTML =
+      '<div class="order-target">' + s.picked.map((pi, n) => '<button class="chip" data-ou="' + n + '"><span class="n">' + (n + 1) + ".</span> " + rich(s.pool[pi].t) + "</button>").join("") + "</div>" +
+      '<div class="opts">' + s.pool.map((it, pi) => s.picked.includes(pi) ? "" : '<button class="chip" data-oi="' + pi + '">' + rich(it.t) + "</button>").join("") + "</div>";
+    setCheck(s.picked.length === s.pool.length);
+  }
+
+  // Пары
+  function rPairs(s, head) {
+    const ps = shuffle(s.unit.pairs).slice(0, 4);
+    s.left = shuffle(ps.map((p, i) => ({ t: p[0], i }))); s.right = shuffle(ps.map((p, i) => ({ t: p[1], i })));
+    s.selL = null; s.selR = null; s.done = new Set(); s.miss = 0; s.n = ps.length;
+    view(head + '<p class="kind">Найди пары</p><p class="qtext">Соедини понятие и его смысл</p><div class="pairs"><div class="col">' +
+      s.left.map((x) => '<button class="opt" data-pl="' + x.i + '">' + esc(x.t) + "</button>").join("") + '</div><div class="col">' +
+      s.right.map((x) => '<button class="opt" data-pr="' + x.i + '">' + esc(x.t) + "</button>").join("") + "</div></div></div>");
+    sheet("", "", '<button class="btn" data-act="pairsDone" disabled>Дальше</button>');
+  }
+  function pairTap(el) {
+    const s = cur();
+    const isL = el.dataset.pl !== undefined;
+    const i = +(isL ? el.dataset.pl : el.dataset.pr);
+    if (s.done.has(i)) return;
+    app.querySelectorAll(isL ? "[data-pl]" : "[data-pr]").forEach((b) => b.classList.remove("sel"));
+    el.classList.add("sel");
+    if (isL) s.selL = i; else s.selR = i;
+    if (s.selL === null || s.selR === null) return;
+    const l = app.querySelector('[data-pl="' + s.selL + '"]'), r = app.querySelector('[data-pr="' + s.selR + '"]');
+    if (s.selL === s.selR) {
+      s.done.add(i);
+      [l, r].forEach((b) => { b.classList.remove("sel"); b.classList.add("done"); b.disabled = true; });
+    } else {
+      s.miss++;
+      [l, r].forEach((b) => { b.classList.remove("sel"); b.classList.add("shake"); setTimeout(() => b.classList.remove("shake"), 320); });
+    }
+    s.selL = null; s.selR = null;
+    if (s.done.size === s.n) {
+      const b = sheetEl.querySelector('[data-act="pairsDone"]');
+      if (b) b.disabled = false;
+    }
+  }
+
+  // Уточняющий вопрос интервьюера
+  function rFollow(s, head) {
+    view(head + '<p class="kind">Уточняющий вопрос</p><p class="hint">После твоего ответа на «' + rich(s.q.q) + '» интервьюер спрашивает:</p><p class="qtext">' +
+      rich(s.q.f.q) + '</p><div id="ans"></div></div>');
+    sheet("", "", '<button class="btn" data-act="revealFollow">Показать ответ</button>');
+  }
+  function revealFollow() {
+    document.getElementById("ans").innerHTML = '<div class="answer">' + rich(cur().q.f.a) + "</div>";
+    sheet("", "", '<div class="row2"><button class="btn red" data-act="followBad">Не справилась</button><button class="btn" data-act="followGood">Справилась</button></div>');
+  }
+
+  function check() {
+    const s = cur();
+    if (s.type === "mcq" || s.type === "cloze") {
+      if (s.sel === null) return;
+      s.checked = true;
+      const right = s.type === "mcq" ? s.q.mc.ok : s.term;
+      const ok = s.opts[s.sel] === right;
+      app.querySelectorAll(".opt").forEach((b, i) => { b.disabled = true; if (s.opts[i] === right) b.classList.add("ok"); else if (i === s.sel) b.classList.add("bad"); });
+      lessonGrade(s.q, ok);
+      result(ok, (ok ? "" : "<p>Правильно: <b>" + (s.type === "mcq" ? rich(right) : esc(right)) + "</b></p>") + "<p>" + rich(s.q.a) + "</p>");
+    } else if (s.type === "order") {
+      const ok = s.picked.every((pi, n) => s.pool[pi].i === n);
+      app.querySelectorAll(".chip").forEach((b) => { b.disabled = true; });
+      lessonGrade(s.q, ok);
+      result(ok, ok ? "<p>Последовательность верная.</p>" : "<p>Правильный порядок:</p><ol>" + s.q.o.map((t) => "<li>" + rich(t) + "</li>").join("") + "</ol>");
+    }
+  }
+  function next() { L.i++; step(); }
+
+  function finish() {
+    const acc = L.graded ? Math.round(L.correct / L.graded * 100) : 100;
+    view('<div class="wrap">' + topbar() + '<div class="done-hero"><div class="big">🎉</div><h1>Урок пройден</h1><p class="sub">' + esc(L.title) + "</p></div>" +
+      '<div class="stats"><div><b>+' + L.xp + "</b><span>опыта</span></div><div><b>" + acc + "%</b><span>точность</span></div><div><b>" + S.streak + "</b><span>дней подряд</span></div></div>" +
+      (L.unit ? '<button class="btn" data-unit="' + L.unit + '">Ещё урок</button><div style="height:14px"></div>' : "") +
+      '<button class="btn ghost" data-go="home">На главную</button></div>');
+  }
+
+  // ---------- собеседование ----------
+  let I = null;
+  const canRecord = () => !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia && window.MediaRecorder);
+  function startInterview() {
+    const weak = shuffle(QS.filter((q) => isWeak(q.id))).slice(0, 4);
+    const rest = shuffle(QS.filter((q) => !weak.includes(q))).slice(0, 10 - weak.length);
+    I = { qs: shuffle(weak.concat(rest)), i: 0, scores: [], timer: null, t0: 0, rec: null, chunks: [], audioUrl: null };
+    iStep();
+  }
+  function stopTimer() { if (I && I.timer) { clearInterval(I.timer); I.timer = null; } }
+  function stopRec() { if (I && I.rec && I.rec.state === "recording") I.rec.stop(); }
+  function iStep() {
+    stopTimer(); stopRec();
+    if (I.i >= I.qs.length) { iFinish(); return; }
+    if (I.audioUrl) { URL.revokeObjectURL(I.audioUrl); I.audioUrl = null; }
+    I.rec = null;
+    const q = I.qs[I.i];
+    const u = UNITS.find((x) => x.id === q.u);
+    view('<div class="wrap"><div class="lessonbar"><button class="x" data-act="iquit" aria-label="Выйти">×</button><div class="prog"><i style="width:' +
+      (I.i / I.qs.length * 100) + '%"></i></div></div><p class="kind">Вопрос ' + (I.i + 1) + " из " + I.qs.length + " · " + esc(u.title) +
+      '</p><p class="qtext">' + rich(q.q) + '</p><div class="timer" id="timer">0:00</div><p class="hint" style="text-align:center">Цель — связный ответ за 30–60 секунд</p>' +
+      (canRecord() ? '<button class="btn ghost" data-act="rec" id="recbtn">🎙️ Записать ответ</button>' : "") + '<div id="ians"></div></div>');
+    sheet("", "", '<button class="btn" data-act="ireveal">Я ответила</button>');
+    I.t0 = Date.now();
+    I.timer = setInterval(() => {
+      const sec = Math.floor((Date.now() - I.t0) / 1000);
+      const el = document.getElementById("timer");
+      if (!el) return;
+      el.textContent = Math.floor(sec / 60) + ":" + String(sec % 60).padStart(2, "0");
+      el.classList.toggle("over", sec > 60);
+    }, 250);
+  }
+  async function toggleRec(btn) {
+    if (I.rec && I.rec.state === "recording") { I.rec.stop(); return; }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      I.chunks = [];
+      I.rec = new MediaRecorder(stream);
+      I.rec.ondataavailable = (e) => I.chunks.push(e.data);
+      I.rec.onstop = () => {
+        stream.getTracks().forEach((t) => t.stop());
+        I.audioUrl = URL.createObjectURL(new Blob(I.chunks, { type: I.rec.mimeType || "audio/webm" }));
+        const b = document.getElementById("recbtn");
+        if (b) { b.textContent = "✅ Записано"; b.disabled = true; }
+        const box = document.getElementById("audio");
+        if (box) box.innerHTML = '<p class="hint" style="margin:10px 0 6px">Твой ответ:</p><audio controls src="' + I.audioUrl + '" style="width:100%"></audio>';
+      };
+      I.rec.start();
+      btn.textContent = "⏹️ Остановить запись";
+    } catch (e) {
+      btn.textContent = "Микрофон недоступен";
+      btn.disabled = true;
+    }
+  }
+  function iReveal() {
+    stopTimer();
+    const q = I.qs[I.i];
+    document.getElementById("ians").innerHTML = '<div id="audio"></div><div class="answer" style="margin-top:14px">' + rich(q.a) + "</div>" +
+      '<div class="card"><p class="kind" style="margin-bottom:4px">Что ты сказала</p>' +
+      q.k.map((k, i) => '<label class="check"><input type="checkbox" data-key="' + i + '"><span>' + rich(k) + "</span></label>").join("") + "</div>";
+    stopRec();
+    sheet("", "", '<button class="btn" data-act="inext">Дальше</button>');
+    document.getElementById("ians").scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+  function iNext() {
+    const q = I.qs[I.i];
+    const boxes = [...app.querySelectorAll("[data-key]")];
+    const score = boxes.length ? boxes.filter((b) => b.checked).length / boxes.length : 0;
+    I.scores.push({ q, score });
+    grade(q.id, score >= 0.75 ? "good" : score >= 0.5 ? "ok" : "bad");
+    addXp(Math.round(4 + score * 8));
+    I.i++;
+    iStep();
+  }
+  function iFinish() {
+    stopTimer();
+    const avg = Math.round(I.scores.reduce((a, s) => a + s.score, 0) / Math.max(1, I.scores.length) * 100);
+    const list = I.scores.map((s) => '<div class="cs-item"><p class="cs-q">' + rich(s.q.q) + '</p><div class="bar"><i style="width:' + Math.round(s.score * 100) +
+      '%;background:' + (s.score >= 0.75 ? "var(--green)" : s.score >= 0.5 ? "var(--amber)" : "var(--red)") + '"></i></div></div>').join("");
+    view('<div class="wrap">' + topbar() + '<div class="done-hero"><div class="big">🎙️</div><h1>Собеседование пройдено</h1><p class="sub">В среднем ты назвала ' + avg +
+      '% ключевых пунктов. Вопросы ниже 50% попали в «Слабые места».</p></div><div class="card">' + list +
+      '</div><div style="height:16px"></div><button class="btn" data-go="interview">Ещё раз</button><div style="height:14px"></div><button class="btn ghost" data-go="home">На главную</button></div>');
+  }
+
+  // ---------- шпаргалка ----------
+  function cheat() {
+    view('<div class="wrap"><button class="back" data-go="home">← Назад</button><h1>Шпаргалка</h1><p class="sub">Короткие ответы на все вопросы — пролистать перед звонком.</p>' +
+      '<input class="search" id="cs" type="search" placeholder="Поиск по вопросам и ответам" aria-label="Поиск"><div id="cslist"></div></div>');
+    drawCheat("");
+    document.getElementById("cs").addEventListener("input", (e) => drawCheat(e.target.value));
+  }
+  function drawCheat(filter) {
+    const f = filter.trim().toLowerCase();
+    const html = UNITS.map((u) => {
+      const items = QS.filter((q) => q.u === u.id && (!f || plain(q.q + " " + q.a + " " + q.k.join(" ")).toLowerCase().includes(f)));
+      if (!items.length) return "";
+      return '<div class="card" style="margin:0 0 14px"><h2>' + u.icon + " " + esc(u.title) + "</h2>" + items.map((q) =>
+        '<div class="cs-item"><p class="cs-q">' + rich(q.q) + '<span class="lvl">' + "●".repeat(q.l) + "</span></p><div>" + rich(q.a) + "</div>" +
+        (q.c ? "<details><summary>Код</summary><pre><code>" + esc(q.c) + "</code></pre></details>" : "") + "</div>").join("") + "</div>";
+    }).join("");
+    document.getElementById("cslist").innerHTML = html || '<p class="sub">Ничего не нашлось.</p>';
+  }
+
+  // ---------- профиль ----------
+  function profile() {
+    const groups = [...new Set(FIELDS.map((f) => f.group))];
+    view('<div class="wrap"><button class="back" data-go="home">← Назад</button><h1>Профиль</h1>' +
+      '<p class="sub">Эти значения подставляются в ответы. Сейчас стоят значения из модели проекта — замени их на свои реальные. Хранятся только в этом браузере.</p>' +
+      groups.map((g) => '<p class="group">' + esc(g) + "</p>" + FIELDS.filter((f) => f.group === g).map((f) =>
+        '<div class="field"><label for="f-' + f.key + '">' + esc(f.label) + '</label><input id="f-' + f.key + '" data-field="' + f.key + '" value="' +
+        esc(S.profile[f.key] !== undefined ? S.profile[f.key] : f.def) + '"></div>').join("")).join("") +
+      '<div class="row2" style="margin-top:24px"><button class="btn ghost" data-act="resetProfile">Вернуть значения модели</button>' +
+      '<button class="btn red" data-act="resetProgress">Сбросить прогресс</button></div></div>');
+    app.querySelectorAll("[data-field]").forEach((inp) => inp.addEventListener("input", (e) => { S.profile[e.target.dataset.field] = e.target.value; save(); }));
+  }
+  // Двойное нажатие вместо confirm(): окна подтверждения бывают заблокированы
+  function confirmTap(btn, label, fn) {
+    if (btn.dataset.armed) { fn(); return; }
+    const original = btn.textContent;
+    btn.dataset.armed = "1";
+    btn.textContent = label;
+    setTimeout(() => { if (btn.isConnected) { delete btn.dataset.armed; btn.textContent = original; } }, 4000);
+  }
+
+  // ---------- навигация и клики ----------
+  function go(name) {
+    stopTimer(); stopRec();
+    ({ home, review: startReview, interview: startInterview, cheat, profile })[name]();
+  }
+  const actions = {
+    reveal: revealFlash,
+    revealFollow,
+    followGood: () => { give(8); next(); },
+    followBad: () => { give(2); next(); },
+    check,
+    next,
+    pairsDone: () => { const s = cur(); give(Math.max(2, 10 - s.miss * 2)); next(); },
+    quit: () => go("home"),
+    iquit: () => go("home"),
+    rec: (btn) => toggleRec(btn),
+    ireveal: iReveal,
+    inext: iNext,
+    hideTip: () => { S.tipHidden = true; save(); home(); },
+    resetProfile: (btn) => confirmTap(btn, "Нажми ещё раз", () => { S.profile = {}; save(); profile(); }),
+    resetProgress: (btn) => confirmTap(btn, "Нажми ещё раз", () => {
+      Object.assign(S, { xp: 0, streak: 0, last: null, day: null, dayXp: 0, cards: {} }); save(); home();
+    })
+  };
+  document.addEventListener("click", (e) => {
+    const el = e.target.closest("button");
+    if (!el || el.disabled) return;
+    const d = el.dataset;
+    if (d.go) return go(d.go);
+    if (d.unit) return startUnit(+d.unit);
+    if (d.opt !== undefined) return pickOpt(+d.opt, el);
+    if (d.rate) return rate(d.rate);
+    if (d.pl !== undefined || d.pr !== undefined) return pairTap(el);
+    if (d.oi !== undefined) { cur().picked.push(+d.oi); return drawOrder(); }
+    if (d.ou !== undefined) { cur().picked.splice(+d.ou, 1); return drawOrder(); }
+    if (d.act && actions[d.act]) actions[d.act](el);
+  });
+
+  home();
+})();
+
+</script>
 </body>
 </html>
